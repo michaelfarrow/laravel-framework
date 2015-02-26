@@ -4,6 +4,10 @@ use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel {
 
+	protected $devMiddleware = [
+		'Clockwork\Support\Laravel\ClockworkMiddleware',
+	];
+
 	/**
 	 * The application's global HTTP middleware stack.
 	 *
@@ -16,7 +20,6 @@ class Kernel extends HttpKernel {
 		'Illuminate\Session\Middleware\StartSession',
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
 		'App\Http\Middleware\VerifyCsrfToken',
-		'Clockwork\Support\Laravel\ClockworkMiddleware',
 	];
 
 	/**
@@ -29,5 +32,21 @@ class Kernel extends HttpKernel {
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
 	];
+
+	public function handle($request)
+	{
+		// Dirty hack to check if we're in a dev environment,
+		// as env vars aren't available
+
+		if (class_exists('PHPUnit_Framework_TestCase'))
+		{
+			$this->middleware = array_merge(
+				$this->middleware,
+				$this->devMiddleware
+			);
+		}
+ 
+		return parent::handle($request);
+	}
 
 }
