@@ -1,6 +1,6 @@
 <?php
 
-$appConfig = [
+return [
 
 	/*
 	|--------------------------------------------------------------------------
@@ -108,12 +108,6 @@ $appConfig = [
 	|
 	*/
 
-	'providers_dev' => [
-
-		'Clockwork\Support\Laravel\ClockworkServiceProvider',
-
-	],
-
 	'providers' => [
 
 		/*
@@ -145,7 +139,7 @@ $appConfig = [
 		/*
 		 * Vendor Service Providers...
 		 */
-
+		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -207,7 +201,3 @@ $appConfig = [
 	],
 
 ];
-
-if($app->isLocal()) $appConfig['providers'] = array_merge($appConfig['providers'], $appConfig['providers_dev']);
-
-return $appConfig;
