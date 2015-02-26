@@ -38,7 +38,7 @@ class Kernel extends HttpKernel {
 		// Dirty hack to check if we're in a dev environment,
 		// as env vars aren't available
 
-		if (class_exists('PHPUnit_Framework_TestCase'))
+		if (class_exists('Clockwork\Support\Laravel\ClockworkMiddleware'))
 		{
 			$this->middleware = array_merge(
 				$this->middleware,
