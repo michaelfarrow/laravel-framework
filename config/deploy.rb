@@ -58,6 +58,7 @@ namespace :laravel do
 				execute :php, "artisan clear-compiled"
 				execute :php, "artisan optimize"
 				execute :php, "artisan route:cache"
+				execute :php, "artisan config:cache"
 			end
 		end
 	end
