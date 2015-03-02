@@ -152,7 +152,8 @@ mysql -uroot -proot -e "create database laravel5;"
 echo -e "\n--- Updating project components and pulling latest versions ---\n"
 
 cd /var/www
-chmod -R vagrant:vagrant "$HOME/tmp"
+chown -R vagrant:vagrant "$HOME/tmp"
+
 sudo -u vagrant -H sh -c "composer install"
 sudo -u vagrant -H sh -c "npm install"
 sudo -u vagrant -H sh -c "bower install --config.interactive=false"
