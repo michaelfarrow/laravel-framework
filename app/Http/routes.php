@@ -11,7 +11,16 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', function(){
+	
+	Queue::later(10, function($job){
+		Log::info('Queues are pretty darn cool');
+		$job->delete();
+	});
+
+});
+
+// Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
 

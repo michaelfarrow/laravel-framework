@@ -1,4 +1,10 @@
-var elixir = require('laravel-elixir');
+var elixir = require('laravel-elixir'),
+	paths = {
+		'bootstrap': 'resources/assets/vendor/bootstrap-sass-official/assets/',
+	}
+
+require('laravel-elixir-sass-compass');
+require('./elixir-custom-tasks');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,5 +18,17 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.less('app.less');
+
+	//Copy Bootstrap assets
+	mix.copy(paths.bootstrap + 'fonts/bootstrap/', "public/fonts/bootstrap/");
+
+	// Compile compass
+	mix.compass();
+
+	// Minify CSS files for build
+	mix.minify(null, elixir.config.cssOutput + '/compiled');
+
+	// Uglify JS files for build
+	mix.uglify(null, elixir.config.jsOutput + '/compiled');
+
 });
