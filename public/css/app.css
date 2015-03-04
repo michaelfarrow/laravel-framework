@@ -7116,6 +7116,3 @@ button.close {
     display: none !important;
   }
 }
-body, label, .checkbox label {
-  font-weight: 300;
-}

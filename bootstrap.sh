@@ -39,7 +39,7 @@ apt-get update
 
 echo -e "\n--- Installing Apache ---\n"
 
-apt-get install -y php5 apache2
+apt-get install -y apache2
 rm -rf /var/www/html
 
 
@@ -52,7 +52,7 @@ apt-get install -y mysql-server-5.5
 
 echo -e "\n--- Installing PHP-specific packages ---\n"
 
-apt-get install -y php5 libapache2-mod-php5 php5-curl php5-mysqlnd php5-mcrypt php5-gd php5-imagick
+apt-get install -y php5 phpunit libapache2-mod-php5 php5-curl php5-mysqlnd php5-mcrypt php5-gd php5-imagick
 
 
 
@@ -166,13 +166,8 @@ sudo -u vagrant -H sh -c "composer global require 'laravel/envoy=~1.0'"
 
 echo -e "\n--- Setting up dev tools and ssh start directory ---\n"
 
-cat > /var/cron <<EOF
-
-
-EOF
-
-sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/dev"
-sudo -u vagrant -H sh -c "$HOME/dev/setup"
+sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/.dev"
+sudo -u vagrant -H sh -c "$HOME/.dev/setup"
 
 sudo -u vagrant -H sh -c "echo /var/www > $HOME/.start_dir"
 
