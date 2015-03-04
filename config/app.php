@@ -165,6 +165,9 @@ return [
 
 	'aliases' => [
 
+		/*
+		 * Laravel Framework Aliases...
+		 */
 		'App'       => 'Illuminate\Support\Facades\App',
 		'Artisan'   => 'Illuminate\Support\Facades\Artisan',
 		'Auth'      => 'Illuminate\Support\Facades\Auth',
@@ -197,6 +200,14 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+
+		/*
+		 * Vendor Aliases...
+		 */
+
+		/*
+		 * Application Aliases...
+		 */
 
 	],
 

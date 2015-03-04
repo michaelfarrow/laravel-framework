@@ -159,12 +159,17 @@ sudo -u vagrant -H sh -c "bower install --config.interactive=false"
 sudo -u vagrant -H sh -c "php artisan migrate"
 sudo -u vagrant -H sh -c "php artisan db:seed"
 sudo -u vagrant -H sh -c "bundle install"
-
+sudo -u vagrant -H sh -c "composer global require 'laravel/envoy=~1.0'"
 
 
 echo -e "\n--- Setting up dev tools and ssh start directory ---\n"
 
-sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/dev"
+cat > /var/cron <<EOF
+
+
+EOF
+
+# sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/dev"
 sudo -u vagrant -H sh -c "$HOME/dev/setup"
 
 sudo -u vagrant -H sh -c "echo /var/www > $HOME/.start_dir"
