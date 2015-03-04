@@ -15,7 +15,7 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
 
 echo -e "\n--- Install base packages ---\n"
 
-apt-get install -y python-software-properties curl wget git supervisor beanstalkd
+apt-get install -y python-software-properties zsh curl wget git supervisor beanstalkd
 
 
 
@@ -161,6 +161,7 @@ sudo -u vagrant -H sh -c "php artisan migrate"
 sudo -u vagrant -H sh -c "php artisan db:seed"
 sudo -u vagrant -H sh -c "bundle install"
 sudo -u vagrant -H sh -c "composer global require 'laravel/envoy=~1.0'"
+[[ ! -f .env ]] && sudo -u vagrant -H sh -c "cp .env.example .env"
 
 
 echo -e "\n--- Setting up dev tools and ssh start directory ---\n"
@@ -170,17 +171,10 @@ cat > /var/cron <<EOF
 
 EOF
 
-# sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/dev"
+sudo -u vagrant -H sh -c "git clone https://weyforth@bitbucket.org/weyforth/dev.git $HOME/dev"
 sudo -u vagrant -H sh -c "$HOME/dev/setup"
 
 sudo -u vagrant -H sh -c "echo /var/www > $HOME/.start_dir"
-
-
-
-echo -e "\n--- Disabling gulp-notifier ---\n"
-
-echo "export DISABLE_NOTIFIER=true" >> $HOME/.bashrc
-
 
 
 echo -e "\n--- Setting up cron ---\n"
@@ -213,6 +207,12 @@ EOF
 supervisorctl reread
 supervisorctl add queue
 supervisorctl start queue
+
+
+
+echo -e "\n--- Setting default shell to ZSH ---\n"
+
+chsh -s /bin/zsh vagrant
 
 
 
