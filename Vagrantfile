@@ -1,10 +1,15 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+osname = "ubuntu"
+bootstraprepo = "https://weyforth@bitbucket.org/weyforth/puppet-bootstrap.git"
+r10krepo = "https://weyforth@bitbucket.org/weyforth/puppet-repository.git"
+environment = "laravel5"
+
 Vagrant.configure("2") do |config|
 	config.vm.network "private_network", type: "dhcp"
 	
-	config.vm.define :laravel5 do |lv5_config|
+	config.vm.define environment do |config|
 
 		config.vm.box = "ubuntu/trusty64"
 		config.vm.box_url = "https://vagrantcloud.com/ubuntu/trusty64"
@@ -16,19 +21,19 @@ Vagrant.configure("2") do |config|
 			config.vm.box_url = "https://vagrantcloud.com/ubuntu/trusty32"
 		end
 
-		lv5_config.ssh.forward_agent = true
-		lv5_config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+		config.ssh.forward_agent = true
+		config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 		
-		lv5_config.vm.network :forwarded_port, guest: 80, host: 8888, auto_correct: true
-		lv5_config.vm.network :forwarded_port, guest: 3306, host: 8889, auto_correct: true
-		lv5_config.vm.network :forwarded_port, guest: 5432, host: 5433, auto_correct: true
+		config.vm.network :forwarded_port, guest: 80, host: 8888, auto_correct: true
+		config.vm.network :forwarded_port, guest: 3306, host: 8889, auto_correct: true
+		config.vm.network :forwarded_port, guest: 5432, host: 5433, auto_correct: true
 
-		lv5_config.vm.synced_folder ".", "/vagrant", disabled: true
-		lv5_config.vm.synced_folder "./", "/var/www", id: "vagrant-root", nfs: true
+		config.vm.synced_folder ".", "/vagrant", disabled: true
+		config.vm.synced_folder "./", "/var/www/vhosts/127.0.0.1", id: "vagrant-root", nfs: true
 
-		lv5_config.vm.provision :shell, :inline => "echo \"Europe/London\" | sudo tee /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata"
+		config.vm.provision :shell, :inline => "dpkg-reconfigure --frontend noninteractive tzdata; sudo locale-gen en_GB.UTF-8"
 
-		lv5_config.vm.provider :virtualbox do |v|
+		config.vm.provider :virtualbox do |v|
 			v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 
 			host = RbConfig::CONFIG['host_os']
@@ -51,7 +56,19 @@ Vagrant.configure("2") do |config|
 			v.customize ["modifyvm", :id, "--cpus", cpus]
 		end
 
-		lv5_config.vm.host_name = File.basename(ENV['PWD']) + ".local"
-		lv5_config.vm.provision :shell, :path => "bootstrap.sh"
+		config.vm.host_name = File.basename(ENV['PWD']) + ".local"
+
+		config.vm.provision "shell" do |shell|
+			shell.path = "bootstrap.sh"
+			shell.args = "'#{osname}' '#{bootstraprepo}' '#{r10krepo}' '#{environment}'"
+		end
+
+		# config.vm.provision "puppet" do |puppet|
+		# 	puppet.modules_path = "/etc/puppet-environment/modules"
+		# 	puppet.manifests_path = "/etc/puppet-environment/manifests"
+		# 	puppet.manifest_file = "site.pp"
+		# 	puppet.options = "--verbose --debug"
+		# end
+
 	end
 end
