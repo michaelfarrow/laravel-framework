@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
 		config.vm.network :forwarded_port, guest: 5432, host: 5433, auto_correct: true
 
 		config.vm.synced_folder ".", "/vagrant", disabled: true
-		config.vm.synced_folder "./", "/var/www/vhosts/127.0.0.1", id: "vagrant-root", nfs: true
+		config.vm.synced_folder "./", "/var/www/vhosts/127.0.0.1/current", id: "vagrant-root", nfs: true
 
 		config.vm.provision :shell, :inline => "dpkg-reconfigure --frontend noninteractive tzdata; sudo locale-gen en_GB.UTF-8"
 
