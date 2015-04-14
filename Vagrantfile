@@ -7,6 +7,8 @@ r10krepo = "https://weyforth@bitbucket.org/weyforth/puppet-repository.git"
 environment = "laravel5"
 
 Vagrant.configure("2") do |config|	
+	config.vm.network "private_network", type: "dhcp"
+
 	config.vm.define environment do |config|
 
 		config.vm.box = "ubuntu/trusty64"
