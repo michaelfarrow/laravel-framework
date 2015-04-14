@@ -62,6 +62,7 @@ Vagrant.configure("2") do |config|
 		end
 
 		config.vm.provision :shell, :inline => "[[ ! -f /vagrant/vendor/autoload.php ]] && cd /vagrant && composer install"
+		config.vm.provision :shell, :inline => "[[ ! -f /vagrant/.env ]] && cp /vagrant/.env.example /vagrant/.env"
 		config.vm.provision :shell, :inline => "cd /vagrant && php artisan migrate"
 		config.vm.provision :shell, :inline => "[[ ! -f /etc/laravel_db_seeded ]] && cd /vagrant && php artisan db:seed && touch /etc/laravel_db_seeded"
 
