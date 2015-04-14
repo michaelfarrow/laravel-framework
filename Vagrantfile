@@ -6,9 +6,7 @@ bootstraprepo = "https://weyforth@bitbucket.org/weyforth/puppet-bootstrap.git"
 r10krepo = "https://weyforth@bitbucket.org/weyforth/puppet-repository.git"
 environment = "laravel5"
 
-Vagrant.configure("2") do |config|
-	config.vm.network "private_network", type: "dhcp"
-	
+Vagrant.configure("2") do |config|	
 	config.vm.define environment do |config|
 
 		config.vm.box = "ubuntu/trusty64"
@@ -63,6 +61,7 @@ Vagrant.configure("2") do |config|
 			shell.args = "'#{osname}' '#{bootstraprepo}' '#{r10krepo}' '#{environment}'"
 		end
 
+		config.vm.provision :shell, :inline => "[[ ! -f /vagrant/vendor/autoload.php ]] cd /vagrant && composer install"
 		config.vm.provision :shell, :inline => "cd /vagrant && php artisan migrate"
 		config.vm.provision :shell, :inline => "[[ ! -f /etc/laravel_db_seeded ]] && cd /vagrant && php artisan db:seed && touch /etc/laravel_db_seeded"
 
