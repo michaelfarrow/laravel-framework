@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
 		config.vm.network :forwarded_port, guest: 3306, host: 8889, auto_correct: true
 		config.vm.network :forwarded_port, guest: 5432, host: 5433, auto_correct: true
 
-		config.vm.synced_folder ".", "/vagrant", disabled: true
+		config.vm.synced_folder ".", "/vagrant", nfs: true
 		config.vm.synced_folder "./", "/var/www/vhosts/127.0.0.1/current", id: "vagrant-root", nfs: true
 
 		config.vm.provision :shell, :inline => "dpkg-reconfigure --frontend noninteractive tzdata; sudo locale-gen en_GB.UTF-8"
@@ -63,12 +63,8 @@ Vagrant.configure("2") do |config|
 			shell.args = "'#{osname}' '#{bootstraprepo}' '#{r10krepo}' '#{environment}'"
 		end
 
-		# config.vm.provision "puppet" do |puppet|
-		# 	puppet.modules_path = "/etc/puppet-environment/modules"
-		# 	puppet.manifests_path = "/etc/puppet-environment/manifests"
-		# 	puppet.manifest_file = "site.pp"
-		# 	puppet.options = "--verbose --debug"
-		# end
+		config.vm.provision :shell, :inline => "cd /vagrant && php artisan migrate"
+		config.vm.provision :shell, :inline => "[[ ! -f /etc/laravel_db_seeded ]] && cd /vagrant && php artisan db:seed && touch /etc/laravel_db_seeded"
 
 	end
 end
