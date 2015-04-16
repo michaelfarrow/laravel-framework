@@ -2,6 +2,8 @@ var elixir = require('laravel-elixir');
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var minify = require('gulp-minify-css');
+var bower = require('gulp-bower');
+
 var _ = require('underscore');
  
 /*
@@ -86,3 +88,27 @@ elixir.extend('modernizr', function(src, outputDir, options) {
   return this.queueTask('modernizr');
  
 });
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Bower Task
+ |--------------------------------------------------------------------------
+ */
+ 
+ 
+elixir.extend('bower', function(src, outputDir, options) {
+ 
+  src = src || './bower.json';
+ 
+  outputDir = outputDir || 'lib/'; 
+ 
+  options = _.extend({directory: src}, options);
+ 
+  gulp.task('bower', function() {
+ 
+    bower(options).pipe(gulp.dest(outputDir));
+
+  });
+ 
+  return this.queueTask('bower');
