@@ -71,8 +71,8 @@ Vagrant.configure("2") do |config|
 		# config.vm.provision :shell, :inline => "cd /vagrant && npm install"
 		# config.vm.provision :shell, :inline => "cd /vagrant && bower install"
 
-		config.vm.provision :shell, :inline => "cd /vagrant && npm install"
-		config.vm.provision :shell, :inline => "cd /vagrant && gulp"
+		config.vm.provision :shell, :inline => "sudo -u vagrant sh -c 'cd /vagrant && npm install'"
+		config.vm.provision :shell, :inline => "sudo -u vagrant sh -c 'cd /vagrant && gulp'"
 
 	end
 end
