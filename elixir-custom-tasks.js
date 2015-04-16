@@ -56,3 +56,33 @@ elixir.extend('minify', function(src, outputDir, options) {
   return this.queueTask('minify');
  
 });
+
+/*
+ |--------------------------------------------------------------------------
+ | Modernizr Task
+ |--------------------------------------------------------------------------
+ */
+ 
+ 
+elixir.extend('modernizr', function(src, outputDir, options) {
+ 
+  src = src || [
+    elixir.config.cssOutput + '/*.css',
+    elixir.config.jsOutput + '/*.js',
+  ];
+ 
+  outputDir = outputDir || elixir.config.jsOutput; 
+ 
+  options = _.extend({keepSpecialComments: 0}, options);
+ 
+  gulp.task('modernizr', function() {
+ 
+    gulp.src(src)
+        .pipe(modernizr(options))
+        .pipe(gulp.dest(outputDir));
+        
+  });
+ 
+  return this.queueTask('modernizr');
+ 
+});

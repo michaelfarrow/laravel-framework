@@ -68,5 +68,8 @@ Vagrant.configure("2") do |config|
 		config.vm.provision :shell, :inline => "cd /vagrant && php artisan migrate"
 		config.vm.provision :shell, :inline => "[[ ! -f /etc/laravel_db_seeded ]] && cd /vagrant && php artisan db:seed && touch /etc/laravel_db_seeded; exit 0"
 
+		config.vm.provision :shell, :inline => "cd /vagrant && npm install"
+		config.vm.provision :shell, :inline => "cd /vagrant && bower install"
+
 	end
 end
