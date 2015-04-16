@@ -19,7 +19,10 @@ require('./elixir-custom-tasks');
 
 elixir(function(mix) {
 
-	//Copy Bootstrap assets
+	// Install FE deps
+	mix.bower('./bower.json', 'public/vendor')
+
+	// Copy Bootstrap assets
 	mix.copy(paths.bootstrap + 'fonts/bootstrap/', "public/fonts/bootstrap/");
 
 	// Compile compass
