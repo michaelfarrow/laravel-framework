@@ -28,8 +28,8 @@ Vagrant.configure("2") do |config|
 		config.vm.network :forwarded_port, guest: 3306, host: 8889, auto_correct: true
 		config.vm.network :forwarded_port, guest: 5432, host: 5433, auto_correct: true
 
-		config.vm.synced_folder ".", "/vagrant", nfs: true
-		config.vm.synced_folder "./", "/var/www/default", id: "vagrant-root", nfs: true
+		config.vm.synced_folder ".", "/vagrant", nfs: true, mount_options: ['actimeo=2']
+		config.vm.synced_folder ".", "/var/www/default", id: "vagrant-root", nfs: true, mount_options: ['actimeo=2']
 
 		config.vm.provision :shell, :inline => "dpkg-reconfigure --frontend noninteractive tzdata; sudo locale-gen en_GB.UTF-8"
 
