@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var minify = require('gulp-minify-css');
 var bower = require('gulp-bower');
+var composer = require('gulp-composer');
 
 var _ = require('underscore');
  
@@ -22,7 +23,7 @@ elixir.extend('uglify', function(src, outputDir, options) {
  
   gulp.task('uglify', function() {
  
-    gulp.src(src)
+    return gulp.src(src)
         .pipe(uglify(options))
         .pipe(gulp.dest(outputDir));
         
@@ -49,7 +50,7 @@ elixir.extend('minify', function(src, outputDir, options) {
  
   gulp.task('minify', function() {
  
-    gulp.src(src)
+    return gulp.src(src)
         .pipe(minify(options))
         .pipe(gulp.dest(outputDir));
         
@@ -67,7 +68,6 @@ elixir.extend('minify', function(src, outputDir, options) {
  
  
 elixir.extend('modernizr', function(src, outputDir, options) {
- 
   src = src || [
     elixir.config.cssOutput + '/*.css',
     elixir.config.jsOutput + '/*.js',
@@ -79,10 +79,10 @@ elixir.extend('modernizr', function(src, outputDir, options) {
  
   gulp.task('modernizr', function() {
  
-    gulp.src(src)
+    return gulp.src(src)
         .pipe(modernizr(options))
         .pipe(gulp.dest(outputDir));
-        
+    
   });
  
   return this.queueTask('modernizr');
@@ -105,11 +105,49 @@ elixir.extend('bower', function(outputDir, options) {
  
   gulp.task('bower', function() {
  
-    bower(options).pipe(gulp.dest(outputDir));
+    return bower(options)
+      .pipe(gulp.dest(outputDir));
 
   });
+
+  // gulp.watch('bower.json', ['bower']);
  
   return this.queueTask('bower');
 
+});
+
+elixir.extend('bower_prune', function() {
+  
+  gulp.task('bower_prune', function() {
+ 
+    return bower({ cmd: 'prune'});
+
+  });
+
+  // gulp.watch('bower.json', ['bower_prune']);
+ 
+  return this.queueTask('bower_prune');
+
+});
+
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Composer Task
+ |--------------------------------------------------------------------------
+ */
+ 
+ 
+elixir.extend('composer', function(options) {
+ 
+  gulp.task('composer', function() {
+ 
+    return composer(options);
+    
+  });
+ 
+  return this.queueTask('composer');
+ 
 });
 

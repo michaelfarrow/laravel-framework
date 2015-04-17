@@ -20,18 +20,25 @@ require('./elixir-custom-tasks');
 elixir(function(mix) {
 
 	// Install FE deps
-	mix.bower('resources/assets/vendor');
+	mix.bower('resources/assets/vendor')
+		.bower_prune()
 
-	// Copy Bootstrap assets
-	mix.copy(paths.bootstrap + 'fonts/bootstrap/', "public/fonts/bootstrap/");
+		// Copy Bootstrap assets
+		.copy(paths.bootstrap + 'fonts/bootstrap/', "public/fonts/bootstrap/")
 
-	// Compile compass
-	mix.compass();
+		// Compile compass
+		.compass()
 
-	// Minify CSS files for build
-	mix.minify(null, elixir.config.cssOutput + '/compiled');
+		// Minify CSS files for build
+		.minify(null, elixir.config.cssOutput + '/compiled')
 
-	// Uglify JS files for build
-	mix.uglify(null, elixir.config.jsOutput + '/compiled');
+		// Uglify JS files for build
+		.uglify(null, elixir.config.jsOutput + '/compiled');
+
+	// Copy environment file
+	mix.copy('.env.example', '.env')
+
+		// Run composer
+		.composer();
 
 });
