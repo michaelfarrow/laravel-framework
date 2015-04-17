@@ -97,17 +97,15 @@ elixir.extend('modernizr', function(src, outputDir, options) {
  */
  
  
-elixir.extend('bower', function(src, outputDir, options) {
- 
-  src = src || null;
- 
+elixir.extend('bower', function(outputDir, options) {
+  
   outputDir = outputDir || 'lib/'; 
  
-  options = _.extend({directory: src}, options);
+  options = _.extend({}, options);
  
   gulp.task('bower', function() {
  
-    bower(options);
+    bower(options).pipe(gulp.dest(outputDir));
 
   });
  
