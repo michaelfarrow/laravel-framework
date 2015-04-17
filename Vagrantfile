@@ -67,8 +67,5 @@ Vagrant.configure("2") do |config|
 			shell.path = "install.sh"
 		end
 
-		config.vm.provision :shell, :inline => "cd /vagrant && php artisan migrate"
-		config.vm.provision :shell, :inline => "[[ ! -f /etc/laravel_db_seeded ]] && cd /vagrant && php artisan db:seed && touch /etc/laravel_db_seeded; exit 0"
-
 	end
 end
