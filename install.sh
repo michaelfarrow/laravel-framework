@@ -2,5 +2,5 @@
 
 cd /vagrant
 
-npm install
+sudo npm install
 gulp

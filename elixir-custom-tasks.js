@@ -99,7 +99,7 @@ elixir.extend('modernizr', function(src, outputDir, options) {
  
 elixir.extend('bower', function(src, outputDir, options) {
  
-  src = src || './bower.json';
+  src = src || null;
  
   outputDir = outputDir || 'lib/'; 
  
@@ -107,8 +107,11 @@ elixir.extend('bower', function(src, outputDir, options) {
  
   gulp.task('bower', function() {
  
-    bower(options).pipe(gulp.dest(outputDir));
+    bower(options);
 
   });
  
   return this.queueTask('bower');
+
+});
+
