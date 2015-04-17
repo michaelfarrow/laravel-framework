@@ -59,12 +59,12 @@ Vagrant.configure("2") do |config|
 		config.vm.host_name = File.basename(ENV['PWD']) + ".local"
 
 		config.vm.provision "shell" do |shell|
-			shell.path = "bootstrap.sh"
+			shell.path = "bootstrap/bootstrap.sh"
 			shell.args = "'#{osname}' '#{bootstraprepo}' '#{r10krepo}' '#{environment}'"
 		end
 
 		config.vm.provision "shell" do |shell|
-			shell.path = "install.sh"
+			shell.path = "bootstrap/install.sh"
 		end
 
 	end

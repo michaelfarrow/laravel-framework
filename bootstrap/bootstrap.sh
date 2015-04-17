@@ -35,7 +35,7 @@ cd "$ENV_DIR"
 hiera_conf='/etc/puppet/hiera.yaml'
 
 [[ -f $hiera_conf ]] && rm $hiera_conf
-[[ ! -h $hiera_conf ]] && ln -s /vagrant/hiera.yaml $hiera_conf
+[[ ! -h $hiera_conf ]] && ln -s /vagrant/hiera/hiera.yaml $hiera_conf
 
 librarian-puppet install --verbose
 

@@ -4,7 +4,7 @@ var elixir = require('laravel-elixir'),
 	}
 
 require('laravel-elixir-sass-compass');
-require('./elixir-custom-tasks');
+require('./resources/elixir/elixir-custom-tasks');
 
 /*
  |--------------------------------------------------------------------------
