@@ -1,7 +1,7 @@
 server_environment: development
 
 mysql::databases:
-  laravel:
+  vagrant:
     charset: utf8
 
 mysql::users:
@@ -9,10 +9,10 @@ mysql::users:
     password_hash: '*FAB0955B2CE7AE2DAFEE46C36501AFC5E65D445D'
 
 mysql::grants:
-  vagrant@localhost/laravel.*:
+  vagrant@localhost/vagrant.*:
     options:
       - GRANT
     privileges:
       - ALL
-    table: laravel.*
+    table: vagrant.*
     user: vagrant@localhost
