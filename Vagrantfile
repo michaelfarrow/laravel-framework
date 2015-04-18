@@ -6,8 +6,9 @@ bootstraprepo = "https://weyforth@bitbucket.org/weyforth/puppet-bootstrap.git"
 r10krepo = "https://weyforth@bitbucket.org/weyforth/puppet-repository.git"
 environment = "laravel5"
 
-Vagrant.configure("2") do |config|	
+Vagrant.configure("2") do |config|
 	config.vm.network "private_network", type: "dhcp"
+	config.ssh.forward_agent = true
 
 	config.vm.define environment do |config|
 
@@ -66,6 +67,8 @@ Vagrant.configure("2") do |config|
 		config.vm.provision "shell" do |shell|
 			shell.path = "bootstrap/install.sh"
 		end
+
+		config.vm.provision :file, source: '~/.gitconfig', destination: '/home/vagrant/.gitconfig' if File.exist?(ENV['HOME'] + '/.gitconfig')
 
 	end
 end
