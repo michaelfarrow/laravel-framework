@@ -41,5 +41,5 @@ librarian-puppet install --verbose
 
 users=$'root\nvagrant'
 
-FACTER_users="${users}" puppet apply --modulepath "$ENV_DIR/modules" "$ENV_DIR/manifests/site.pp" --verbose --debug
+FACTER_users="${users}" FACTER_vhosts="default" FACTER_vhosts_full="/var/www/vhosts/default" puppet apply --modulepath "$ENV_DIR/modules" "$ENV_DIR/manifests/site.pp" --verbose --debug
 
