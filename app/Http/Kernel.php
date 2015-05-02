@@ -2,7 +2,8 @@
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends HttpKernel {
+class Kernel extends HttpKernel
+{
 
 	/**
 	 * The application's global HTTP middleware stack.
@@ -17,6 +18,7 @@ class Kernel extends HttpKernel {
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
 		'App\Http\Middleware\VerifyCsrfToken',
 		'Clockwork\Support\Laravel\ClockworkMiddleware',
+		'Waavi\Translation\Middleware',
 	];
 
 	/**
@@ -28,6 +30,7 @@ class Kernel extends HttpKernel {
 		'auth' => 'App\Http\Middleware\Authenticate',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
+		'role.admin' => 'App\Http\Middleware\RoleAdmin',
 	];
 
 }

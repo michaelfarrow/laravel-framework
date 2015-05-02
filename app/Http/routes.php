@@ -1,30 +1,53 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-// Route::get('/', function(){
-	
-// 	Queue::later(10, function($job){
-// 		Log::info('Queues are pretty darn cool');
-// 		$job->delete();
-// 	});
-
-// });
-
-Route::get('/', 'WelcomeController@index');
-
-Route::get('home', 'HomeController@index');
-
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
+Route::get('/', [
+	'uses' => 'WelcomeController@index',
+	'as'   => 'welcome',
 ]);
+
+Route::get('test/{id}', [
+	'uses' => 'WelcomeController@test',
+	'as'   => 'test',
+]);
+
+Route::controller('account', 'Auth\AuthController', [
+	'getLogin'     => 'auth.login',
+	'postLogin'    => 'auth.login.do',
+	'getRegister'  => 'auth.register',
+	'postRegister' => 'auth.register.do',
+	'getLogout'    => 'auth.logout',
+	'getComplete'  => 'auth.complete',
+	'getConfirm'   => 'auth.confirm',
+	'getRoadblock' => 'auth.roadblock',
+	'getResendConfirmation' => 'auth.resend_confirmation',
+]);
+
+Route::controller('password', 'Auth\PasswordController', [
+	'getEmail'  => 'password.email',
+	'postEmail' => 'password.email.do',
+	'getReset'  => 'password.reset',
+	'postReset' => 'password.reset.do',
+]);
+
+Route::get('home', [
+	'uses' => 'App\HomeController@index',
+	'as'   => 'app.home',
+]);
+
+Route::group([
+	'prefix'    => 'admin',
+	'namespace' => 'Admin',
+], function(){
+
+	Route::get('/', [
+		'uses' => 'HomeController@index',
+		'as'   => 'admin.home',
+	]);
+
+	Route::controller('copy', 'CopyController', [
+		'getIndex'  => 'admin.copy',
+		'postIndex' => 'admin.copy.do',
+	]);
+
+});
+

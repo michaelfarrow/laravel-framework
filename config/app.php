@@ -132,7 +132,7 @@ return [
 		'Illuminate\Redis\RedisServiceProvider',
 		'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
 		'Illuminate\Session\SessionServiceProvider',
-		'Illuminate\Translation\TranslationServiceProvider',
+		'Waavi\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 
@@ -140,6 +140,7 @@ return [
 		 * Vendor Service Providers...
 		 */
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
+		'Zizaco\Entrust\EntrustServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -204,6 +205,8 @@ return [
 		/*
 		 * Vendor Aliases...
 		 */
+
+		'Entrust' => 'Zizaco\Entrust\EntrustFacade',
 
 		/*
 		 * Application Aliases...
