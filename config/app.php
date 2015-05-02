@@ -26,7 +26,7 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => env('APP_URL', 'http://localhost:8888'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -141,6 +141,7 @@ return [
 		 */
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 		'Zizaco\Entrust\EntrustServiceProvider',
+		'Kyslik\ViewClear\ViewClearServiceProvider',
 
 		/*
 		 * Application Service Providers...
