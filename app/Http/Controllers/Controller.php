@@ -39,8 +39,15 @@ abstract class Controller extends BaseController
 	protected function setPageData()
 	{
 		$route = $this->route->current();
+		$route = ($route ? $route->getName() : 'noRoute');
+		$routeParts = explode('.', $route);
 		$siteTitleKey = 'copy.site.title';
-		$pageTitleKey = 'copy.' . ($route ? $this->route->current()->getName() : 'noRoute') . '.title';
+		$pageKey = 'copy.' . $route;
+		$pageCopy = trans($pageKey);
+		if($pageCopy == $pageKey) $pageCopy = [];
+		$pageCopy = (object) $pageCopy;
+
+		$pageTitleKey = $pageKey . '.title';
 
 		$pageTitle = trans($pageTitleKey);
 		if ($pageTitle == $pageTitleKey)
@@ -61,6 +68,9 @@ abstract class Controller extends BaseController
 			'siteTitle' => $siteTitle,
 			'fullTitle' => $title,
 			'title' => $pageTitle,
+			'copy' => $pageCopy,
+			'route' => $route,
+			'routeParts' => $routeParts,
 		];
 	}
 

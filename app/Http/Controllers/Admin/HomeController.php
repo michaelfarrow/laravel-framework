@@ -11,7 +11,7 @@ class HomeController extends AdminController {
 	 */
 	public function index()
 	{
-		return $this->view('home');
+		return $this->view('admin');
 	}
 
 }

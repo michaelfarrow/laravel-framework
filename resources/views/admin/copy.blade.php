@@ -1,4 +1,4 @@
-@extends('app')
+@extends('admin')
 
 @section('content')
 <div class="container">
@@ -24,9 +24,9 @@
 						@foreach($trans as $groupKey => $group)
 							@foreach(array_dot($group) as $key => $value)
 								<div class="form-group @if($errors->has($combinedKey = $groupKey . '[' . join('][', explode('.', $key)) . ']')) has-error @endif">
-									<label class="col-md-4 control-label">{{ $combinedKey }}</label>
+									<label class="col-md-4 control-label" for="{{ $combinedKey }}">{{ $combinedKey }}</label>
 									<div class="col-md-6">
-										<textarea class="form-control" name="{{ $combinedKey }}">{{ old($groupKey . '.' . $key) ?: $value }}</textarea>
+										<textarea id="{{ $combinedKey }}" class="form-control" name="{{ $combinedKey }}">{{ old($groupKey . '.' . $key) ?: $value }}</textarea>
 									</div>
 								</div>
 							@endforeach

@@ -4,8 +4,6 @@ set :ssh_options, {
    auth_methods: %w(publickey)
 }
 
-set :application, ENV['DEPLOY_NAME']
-
 set :repo_url,  ENV['DEPLOY_REPO_URL']
 
 namespace :composer do
@@ -59,6 +57,7 @@ namespace :laravel do
 				execute :php, "artisan optimize"
 				execute :php, "artisan route:cache"
 				execute :php, "artisan config:cache"
+				execute :php, "artisan view:clear"
 			end
 		end
 	end

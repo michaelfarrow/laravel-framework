@@ -1,6 +1,8 @@
 var elixir = require('laravel-elixir'),
 	paths = {
-		'bootstrap': 'resources/assets/vendor/bootstrap-sass-official/assets/',
+		'bootstrap': 'public/vendor/bootstrap-sass-official/assets',
+		'requirejs': 'public/vendor/requirejs',
+		'bower_libs': 'public/vendor'
 	}
 
 require('laravel-elixir-sass-compass');
@@ -20,25 +22,68 @@ require('./resources/elixir/elixir-custom-tasks');
 elixir(function(mix) {
 
 	// Install FE deps
-	mix.bower('resources/assets/vendor')
+	mix.bower(paths.bower_libs)
+
+		// Prune FE deps
 		.bower_prune()
 
+		// Copy requirejs
+		.copy(paths.requirejs + '/require.js', elixir.config.jsOutput + '/.compiled/require.js')
+
 		// Copy Bootstrap assets
-		.copy(paths.bootstrap + 'fonts/bootstrap/', "public/fonts/bootstrap/")
+		.copy(paths.bootstrap + '/fonts/bootstrap/', "public/fonts/bootstrap/")
 
 		// Compile compass
-		.compass()
+		.compass(null, elixir.config.cssOutput + '/.compiled')
+
+		// Build Custom Modernizr
+		.modernizr([
+				elixir.config.cssOutput + '/.compiled/*.css',
+				elixir.config.jsOutput + '/*.js',
+			],
+			elixir.config.jsOutput + '/.compiled', {
+				excludeTests: ['hidden'],
+				options: [
+					"setClasses",
+					"addTest",
+					"html5printshiv",
+					"testProp",
+					"fnBind"
+				],
+			}
+		)
+
+		// Build JS bundle
+		.requirejs([
+			elixir.config.jsOutput + '/main.app.js',
+			elixir.config.jsOutput + '/main.admin.js'
+		], elixir.config.jsOutput + '/.compiled', {
+			baseUrl: paths.bower_libs,
+			name: '../vendor/almond/almond',
+			mainConfigFile: elixir.config.jsOutput + '/config.js',
+		})
 
 		// Minify CSS files for build
-		.minify(null, elixir.config.cssOutput + '/compiled')
+		.minify(
+			elixir.config.cssOutput + '/.compiled/*.css',
+			elixir.config.cssOutput + '/.minified'
+		)
 
 		// Uglify JS files for build
-		.uglify(null, elixir.config.jsOutput + '/compiled');
+		.uglify([
+			elixir.config.jsOutput + '/.compiled/*.js',
+			elixir.config.jsOutput + '/game.js',
+			elixir.config.jsOutput + '/vendor/modernizr.js',
+			elixir.config.jsOutput + '/modernizr/highres.js',
+		], elixir.config.jsOutput + '/.minified')
 
-	// Copy environment file
-	mix.copy('.env.example', '.env')
+		// Version files
+		.version([
+			elixir.config.jsOutput + '/.minified/*.js',
+			elixir.config.cssOutput + '/.minified/*.css',
+		]);
 
-		// Run composer
-		.composer();
+	// Run composer
+	mix.composer();
 
 });

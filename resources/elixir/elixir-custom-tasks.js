@@ -1,11 +1,62 @@
-var elixir = require('laravel-elixir');
-var gulp = require('gulp');
-var uglify = require('gulp-uglify');
-var minify = require('gulp-minify-css');
-var bower = require('gulp-bower');
-var composer = require('gulp-composer');
+var elixir = require('laravel-elixir'),
+    gulp = require('gulp'),
+    uglify = require('gulp-uglify'),
+    minify = require('gulp-minify-css'),
+    bower = require('gulp-bower'),
+    composer = require('gulp-composer'),
+    modernizr = require('gulp-modernizr'),
+    _ = require('underscore'),
+    through2 = require('through2'),
+    rjs = require('gulp-requirejs-optimize'),
+    utilities = require('laravel-elixir/ingredients/commands/Utilities'),
+    notification = require('laravel-elixir/ingredients/commands/Notification');
 
-var _ = require('underscore');
+
+/*
+ |--------------------------------------------------------------------------
+ | Require.js
+ |--------------------------------------------------------------------------
+ */
+
+elixir.extend('requirejs', function (src, dest, options) {
+
+  var config = this,
+    defaultOptions = {
+      debug:  ! config.production,
+      srcDir: config.assetsDir + 'js',
+      output: config.jsOutput,
+      optimize: 'none',
+      useStrict: true,
+      findNestedDependencies: true,
+      wrap: true
+    };
+
+  options = _.extend(defaultOptions, options);
+
+  gulp.task('requirejs', function () {
+
+    return gulp.src(src)
+      .pipe(rjs(function(file) {
+        var filename = file.relative,
+            name = filename.substring(0, filename.length -3);
+
+        return _.extend({
+          include: name
+        }, options);
+      })).pipe(gulp.dest(dest));
+
+      // .pipe(through2.obj(function (file, enc, next) {
+      //  this.push(file);
+      //  this.end();
+      //  next();
+      // }))
+  });
+
+  this.registerWatcher('requirejs', options.srcDir + '/**/*.js');
+
+  return this.queueTask('requirejs');
+
+});
  
 /*
  |--------------------------------------------------------------------------
@@ -68,6 +119,7 @@ elixir.extend('minify', function(src, outputDir, options) {
  
  
 elixir.extend('modernizr', function(src, outputDir, options) {
+ 
   src = src || [
     elixir.config.cssOutput + '/*.css',
     elixir.config.jsOutput + '/*.js',
@@ -82,7 +134,7 @@ elixir.extend('modernizr', function(src, outputDir, options) {
     return gulp.src(src)
         .pipe(modernizr(options))
         .pipe(gulp.dest(outputDir));
-    
+        
   });
  
   return this.queueTask('modernizr');
