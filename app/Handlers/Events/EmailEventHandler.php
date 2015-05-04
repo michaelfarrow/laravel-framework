@@ -87,14 +87,14 @@ class EmailEventHandler extends MultipleEventHandler {
 	}
 
 	/**
-	 * Handle email ubsubscribed event.
+	 * Handle email unsubscribed event.
 	 *
 	 * @param  $event
 	 * @return void
 	 */
 	public function onUnsubscribed($event)
 	{
-		\Log::info('email:ubsubscribed:' . $event->timestamp . ':' . $event->email);
+		\Log::info('email:unsubscribed:' . $event->timestamp . ':' . $event->email);
 	}
 
 }

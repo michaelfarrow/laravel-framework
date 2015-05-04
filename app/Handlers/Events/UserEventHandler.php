@@ -11,9 +11,9 @@ class UserEventHandler extends MultipleEventHandler {
 	 * @var array
 	 */
 	protected $listen = [
-		'auth.login' => 'onLogin',
+		'auth.login'   => 'onLogin',
 		'auth.attempt' => 'onAttempt',
-		'auth.logout' => 'onLogout',
+		'auth.logout'  => 'onLogout',
 	];
 
 	/**
