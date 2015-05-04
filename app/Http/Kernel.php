@@ -31,6 +31,7 @@ class Kernel extends HttpKernel
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
 		'role.admin' => 'App\Http\Middleware\RoleAdmin',
+		'hook.verify' => 'App\Http\Middleware\VerifyHook',
 	];
 
 }

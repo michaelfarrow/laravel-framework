@@ -11,9 +11,16 @@ class EventServiceProvider extends ServiceProvider {
 	 * @var array
 	 */
 	protected $listen = [
-		'event.name' => [
-			'EventListener',
-		],
+	];
+
+	/**
+	 * The event handler subscriber mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $subscribe = [
+		'App\Handlers\Events\UserEventHandler',
+		'App\Handlers\Events\EmailEventHandler',
 	];
 
 	/**
@@ -25,8 +32,6 @@ class EventServiceProvider extends ServiceProvider {
 	public function boot(DispatcherContract $events)
 	{
 		parent::boot($events);
-
-		//
 	}
 
 }

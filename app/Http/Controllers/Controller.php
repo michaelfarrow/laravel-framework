@@ -1,9 +1,9 @@
 <?php namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use App;
+use App\Traits\ResolvesDependencies;
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
@@ -14,7 +14,9 @@ use Illuminate\Routing\Router as Route;
 abstract class Controller extends BaseController
 {
 
-	use DispatchesCommands, ValidatesRequests;
+	use DispatchesCommands,
+	    ValidatesRequests,
+	    ResolvesDependencies;
 
 	protected $layout;
 	protected $request;
@@ -23,6 +25,11 @@ abstract class Controller extends BaseController
 	protected $session;
 	protected $route;
 
+	/**
+	 * Create a new controller instance.
+	 *
+	 * @return void
+	 */
 	public function __construct(
 		Request  $request = null,
 		Guard    $guard = null,
@@ -72,37 +79,6 @@ abstract class Controller extends BaseController
 			'route' => $route,
 			'routeParts' => $routeParts,
 		];
-	}
-
-	protected function resolve()
-	{
-		static $dependencies;
-
-		$app = App::getInstance();
-		$trace = debug_backtrace();
-
-		// Get parameters
-		if ($dependencies === null)
-		{
-			$dependencies = [];
-		}
-
-		$reflector = new \ReflectionClass($trace[1]['class']);
-		$constructor = $reflector->getConstructor();
-		$dependencies = array_merge(
-			$dependencies,
-			$constructor->getParameters()
-		);
-
-		foreach ($dependencies as $dependency)
-		{
-			// Process only omitted optional parameters
-			if ($this->{$dependency->name} === null)
-			{
-				// Assign variable
-				$this->{$dependency->name} = $app->make($dependency->getClass()->name);
-			}
-		}
 	}
 
 	protected function layout($items)

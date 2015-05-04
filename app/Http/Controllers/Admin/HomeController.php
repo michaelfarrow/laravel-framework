@@ -11,6 +11,12 @@ class HomeController extends AdminController {
 	 */
 	public function index()
 	{
+		\Queue::push(function($job)
+		{
+		  \Log::info(config('app.test'));
+
+		   $job->delete();
+		});
 		return $this->view('admin');
 	}
 

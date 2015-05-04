@@ -12,8 +12,8 @@ class CopyController extends AdminController {
 	protected $language;
 
 	public function __construct(
-		TranslatorInterface $trans,
-		Language $language
+		TranslatorInterface $trans = null,
+		Language $language = null
 	) {
 		parent::__construct();
 

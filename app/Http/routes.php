@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', [
+Route::any('/', [
 	'uses' => 'WelcomeController@index',
 	'as'   => 'welcome',
 ]);
@@ -48,6 +48,15 @@ Route::group([
 		'getIndex'  => 'admin.copy',
 		'postIndex' => 'admin.copy.do',
 	]);
+
+});
+
+Route::group([
+	'prefix'    => 'hook',
+	'namespace' => 'Hooks',
+], function(){
+
+	Route::controller('mailgun', 'MailgunController');
 
 });
 
