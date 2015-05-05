@@ -1,0 +1,57 @@
+<?php
+
+if ( ! function_exists('trans_hier'))
+{
+	/**
+	 * Translate the given message.
+	 *
+	 * @param  string  $id
+	 * @param  string  $idAppend
+	 * @param  string  $default
+	 * @param  array   $parameters
+	 * @param  string  $domain
+	 * @param  string  $locale
+	 * @return string
+	 */
+	function trans_hier($id = null, $idAppend = null, $default = null, $parameters = array(), $domain = 'messages', $locale = null)
+	{
+		if (is_null($id) || is_null($idAppend)) return app('translator');
+
+		$idOriginal = $id . '.' . $idAppend;
+		$idExploded = explode('.', $id);
+
+		do
+		{
+			$id = implode('.', $idExploded) . '.' . $idAppend;
+			$translated = trans($id, $parameters, $domain, $locale);
+			array_pop($idExploded);
+		}
+		while ($id == $translated && count($idExploded) > 0);
+
+		return $id == $translated
+			? (is_null($default) ? $idOriginal : $default)
+			: $translated;
+	}
+}
+
+if ( ! function_exists('trans_default'))
+{
+	/**
+	 * Translate the given message.
+	 *
+	 * @param  string  $id
+	 * @param  string  $default
+	 * @param  array   $parameters
+	 * @param  string  $domain
+	 * @param  string  $locale
+	 * @return string
+	 */
+	function trans_default($id = null, $default = null, $parameters = array(), $domain = 'messages', $locale = null)
+	{
+		$return = trans($id, $parameters, $domain, $locale);
+
+		return $return == $id
+			? (is_null($default) ? $id : $default)
+			: $return;
+	}
+}
