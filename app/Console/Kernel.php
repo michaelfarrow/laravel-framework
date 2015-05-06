@@ -24,8 +24,19 @@ class Kernel extends ConsoleKernel {
 	{
 		$schedule->call(function()
 		{
-			\Log::info('test');
+			\Log::info('minutely');
 		})->cron('* * * * *');
+
+		$schedule->call(function()
+		{
+			\Log::info('5 minutely');
+		})->everyFiveMinutes();
+		$schedule->call(function()
+		{
+			\Log::info('10 minutely');
+		})->everyTenMinutes();
+
+		
 
 		$schedule->command('inspire')
 				 ->hourly();
