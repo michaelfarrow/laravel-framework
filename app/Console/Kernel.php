@@ -22,6 +22,11 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected function schedule(Schedule $schedule)
 	{
+		$schedule->call(function()
+		{
+			\Log::info('test');
+		})->cron('* * * * *');
+
 		$schedule->command('inspire')
 				 ->hourly();
 	}
