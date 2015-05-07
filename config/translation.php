@@ -17,7 +17,7 @@ return array(
 	| 	'database' 		Use the database as the exclusive source for language entries.
 	|   'filesystem'	Use files as the exclusive source for language entries [Laravel's default].
 	*/
-	'mode'					=>	'mixed',
+	'mode'					=>	'filesystem',
 
 	/*
 	|--------------------------------------------------------------------------

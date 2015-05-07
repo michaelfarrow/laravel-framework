@@ -26,7 +26,7 @@ namespace :laravel do
 		on roles(:all), in: :sequence, wait: 2 do
 			within release_path  do
 				execute :chmod, "u+x artisan"
-				execute :find, "storage/ -type d -print0 | xargs -0 chmod 0775"
+				execute :find, "storage/ -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 chmod 0775"
 			end
 		end
 	end
