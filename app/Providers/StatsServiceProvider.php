@@ -12,6 +12,7 @@ class StatsServiceProvider extends ServiceProvider {
 	 */
 	protected $statCommands = [
 		'App\Console\Commands\Stats\UserStatsCommand',
+		'App\Console\Commands\Stats\RoleStatsCommand',
 	];
 
 	/**
@@ -26,7 +27,7 @@ class StatsServiceProvider extends ServiceProvider {
 		$statistics = new Statistics;
 		$statistics->register($statCommands);
 
-		$this->app->instance('statistics', $statistics);
+		$this->app->instance('Statistics', $statistics);
 	}
 
 }

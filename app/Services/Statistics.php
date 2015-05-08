@@ -47,12 +47,22 @@ class Statistics {
 		{
 			$period = $command::getSchedule();
 
-			call_user_func([
-				$schedule->command(
-					$command::getStatPrefix() . $command::getStatName()
-				),
-				$period
-			]);
+			$commandName = $command::getStatPrefix() . $command::getStatName();
+			$variants = [
+				'all_time',
+				'month',
+				'week',
+				'day',
+			];
+
+			foreach ($variants as $variant) {
+				call_user_func([
+					$schedule->command(
+						$commandName . ' ' . $variant
+					),
+					$period
+				]);
+			}
 		}
 	}
 

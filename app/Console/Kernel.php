@@ -24,14 +24,13 @@ class Kernel extends ConsoleKernel {
 	 */
 	function updateCommands($schedule)
 	{
-		$statistics = app()->make('statistics');
+		$statistics = $this->app->make('Statistics');
 
 		$this->commands = array_merge(
 			$this->commands,
 			$statistics->commands()
 		);
 
-		$statistics->schedule($schedule);
 	}
 
 	/**
@@ -43,6 +42,9 @@ class Kernel extends ConsoleKernel {
 	protected function schedule(Schedule $schedule)
 	{
 		$this->updateCommands($schedule);
+
+		$statistics = $this->app->make('Statistics');
+		$statistics->schedule($schedule);
 	}
 
 }

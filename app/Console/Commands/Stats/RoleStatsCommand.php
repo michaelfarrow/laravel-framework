@@ -2,28 +2,28 @@
 
 use App\Console\Commands\DataStatsCommand;
 
-class UserStatsCommand extends DataStatsCommand {
+class RoleStatsCommand extends DataStatsCommand {
 
 	/**
 	 * The stat name.
 	 *
 	 * @var string
 	 */
-	static public $statName = 'user';
+	static public $statName = 'role';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'User count';
+	protected $description = 'Roles count';
 
 	/**
 	 * The database table to search within.
 	 *
 	 * @var string
 	 */
-	protected $queryTable = 'users';
+	protected $queryTable = 'roles';
 
 	/**
 	 * The date/time field to use in the query.

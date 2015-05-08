@@ -4,9 +4,10 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Carbon\Carbon;
+use App\Models\Stat;
 use DB;
 
-abstract class StatsCommand extends Command {
+abstract class DataStatsCommand extends Command {
 
 	/**
 	 * The console command name.
@@ -127,13 +128,23 @@ abstract class StatsCommand extends Command {
 	}
 
 	/**
+	 * Get the period name for the query.
+	 *
+	 * @return string
+	 */
+	protected function getPeriodName()
+	{
+		return $this->argument('period') ?: 'all_time';
+	}
+
+	/**
 	 * Get the period dates for the query.
 	 *
 	 * @return object
 	 */
 	protected function getPeriod()
 	{
-		$period = $this->argument('period');
+		$period = $this->getPeriodName();
 		$start = $this->argument('start');
 		$now = Carbon::now();
 		$end = null;
@@ -295,6 +306,30 @@ abstract class StatsCommand extends Command {
 	}
 
 	/**
+	 * Save the result to the database, or update any existing data.
+	 *
+	 * @return void
+	 */
+	protected function saveResult($result = null)
+	{
+		if($result && is_float($result) || is_int($result))
+		{
+			$start = $this->startDate;
+			$end = $this->endDate;
+
+			$stat = Stat::firstOrNew([
+				'start'  => $start,
+				'end'    => $end,
+				'name'   => $this->getStatName(),
+				'period' => $this->getPeriodName(),
+			]);
+
+			$stat->value = $result;
+			$stat->save();
+		}
+	}
+
+	/**
 	 * Execute the console command.
 	 *
 	 * @return void
@@ -307,6 +342,8 @@ abstract class StatsCommand extends Command {
 		$result = $this->executeQuery($query);
 		$result = $this->preProcessResult($result);
 		$result = $this->processResult($result);
+
+		$this->saveResult($result);
 
 		(new \Illuminate\Support\Debug\Dumper)->dump($result);
 	}
