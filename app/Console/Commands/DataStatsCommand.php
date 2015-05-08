@@ -1,41 +1,25 @@
 <?php namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Console\Commands\StatsCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Carbon\Carbon;
-use App\Models\Stat;
+use Statistics;
 use DB;
 
-abstract class DataStatsCommand extends Command {
+abstract class DataStatsCommand extends StatsCommand {
 
 	/**
-	 * The console command name.
+	 * The support periods.
 	 *
 	 * @var string
 	 */
-	protected $name = '';
-
-	/**
-	 * The stat name.
-	 *
-	 * @var string
-	 */
-	static public $statName = 'user';
-
-	/**
-	 * The console command schedule.
-	 *
-	 * @var string
-	 */
-	static public $schedule = 'everyFiveMinutes';
-
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
+	static protected $supportedPeriods = [
+		'all_time',
+		'month',
+		'week',
+		'day',
+	];
 
 	/**
 	 * The database table to search within.
@@ -66,32 +50,6 @@ abstract class DataStatsCommand extends Command {
 	protected $queryType = 'count';
 
 	/**
-	 * Stores the calculated start date.
-	 *
-	 * @var Carbon\Carbon
-	 */
-	protected $startDate = null;
-
-	/**
-	 * Stores the calculated end date.
-	 *
-	 * @var Carbon\Carbon
-	 */
-	protected $endDate = null;
-
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->name = static::getStatPrefix() . static::getStatName();
-
-		parent::__construct();
-	}
-
-	/**
 	 * Get a single query field.
 	 *
 	 * @return string
@@ -117,27 +75,6 @@ abstract class DataStatsCommand extends Command {
 	}
 
 	/**
-	 * Create Carbon date from argument string.
-	 *
-	 * @param  string $date
-	 * @return Carbon\Carbon
-	 */
-	protected function createDate($date)
-	{
-		return Carbon::createFromFormat('Y-m-d', $date);
-	}
-
-	/**
-	 * Get the period name for the query.
-	 *
-	 * @return string
-	 */
-	protected function getPeriodName()
-	{
-		return $this->argument('period') ?: 'all_time';
-	}
-
-	/**
 	 * Get the period dates for the query.
 	 *
 	 * @return object
@@ -157,25 +94,20 @@ abstract class DataStatsCommand extends Command {
 
 			case 'month':
 				$start = $start
-					? $this->createDate($start)->startOfMonth()->startOfDay()
+					? Statistics::createDate($start)->startOfMonth()->startOfDay()
 					: $now->startOfMonth()->startOfDay();
 				break;
 
 			case 'week':
 				$start = $start
-					? $this->createDate($start)->startOfWeek()->startOfDay()
+					? Statistics::createDate($start)->startOfWeek()->startOfDay()
 					: $now->startOfWeek()->startOfDay();
 				break;
 
 			case 'day':
 				$start = $start
-					? $this->createDate($start)->startOfDay()
+					? Statistics::createDate($start)->startOfDay()
 					: $now->startOfDay();
-				break;
-			
-			default:
-				$this->error("Incorrect period '$period'");
-				exit;
 				break;
 		}
 
@@ -210,17 +142,15 @@ abstract class DataStatsCommand extends Command {
 	{
 		$query = DB::table($this->queryTable);
 
-		$period = $this->getPeriod();
+		$period = $this->period;
 		
 		if($period->start)
 		{
-			$this->startDate = $period->start;
 			$query = $query->where($this->queryDateField, '>=', $period->start);
 		}
 
 		if($period->end)
 		{
-			$this->endDate = $period->end;
 			$query = $query->where($this->queryDateField, '<', $period->end);
 		}
 
@@ -228,21 +158,11 @@ abstract class DataStatsCommand extends Command {
 		$latest = $this->option('latest');
 
 		if($earliest)
-			$query = $query->where($this->queryDateField, '>=', $this->createDate($earliest));
+			$query = $query->where($this->queryDateField, '>=', Statistics::createDate($earliest));
 
 		if($latest)
-			$query = $query->where($this->queryDateField, '<', $this->createDate($latest));
+			$query = $query->where($this->queryDateField, '<', Statistics::createDate($latest));
 
-		return $query;
-	}
-
-	/**
-	 * Alter the original query.
-	 *
-	 * @return Builder
-	 */
-	protected function alterQuery($query)
-	{
 		return $query;
 	}
 
@@ -296,59 +216,6 @@ abstract class DataStatsCommand extends Command {
 	}
 
 	/**
-	 * Process the result of the database query.
-	 *
-	 * @return Builder
-	 */
-	protected function processResult($result)
-	{
-		return $result;
-	}
-
-	/**
-	 * Save the result to the database, or update any existing data.
-	 *
-	 * @return void
-	 */
-	protected function saveResult($result = null)
-	{
-		if($result && is_float($result) || is_int($result))
-		{
-			$start = $this->startDate;
-			$end = $this->endDate;
-
-			$stat = Stat::firstOrNew([
-				'start'  => $start,
-				'end'    => $end,
-				'name'   => $this->getStatName(),
-				'period' => $this->getPeriodName(),
-			]);
-
-			$stat->value = $result;
-			$stat->save();
-		}
-	}
-
-	/**
-	 * Execute the console command.
-	 *
-	 * @return void
-	 */
-	public function fire()
-	{
-		$query = $this->getQuery();
-		$query = $this->alterQuery($query);
-
-		$result = $this->executeQuery($query);
-		$result = $this->preProcessResult($result);
-		$result = $this->processResult($result);
-
-		$this->saveResult($result);
-
-		(new \Illuminate\Support\Debug\Dumper)->dump($result);
-	}
-
-	/**
 	 * Get the console command arguments.
 	 *
 	 * @return array
@@ -356,7 +223,7 @@ abstract class DataStatsCommand extends Command {
 	protected function getArguments()
 	{
 		return [
-			['period', InputArgument::OPTIONAL, 'all_time, month, week, or day', 'all_time'],
+			['period', InputArgument::OPTIONAL, array_human(static::getSupportedPeriods(), ',', 'or'), $this->getDefaultPeriodName()],
 			['start', InputArgument::OPTIONAL, 'Start date, defaults to current date, minus period specified', null],
 		];
 	}
@@ -372,36 +239,6 @@ abstract class DataStatsCommand extends Command {
 			['earliest', null, InputOption::VALUE_OPTIONAL, 'Any dates before this will be ignored.', null],
 			['latest', null, InputOption::VALUE_OPTIONAL, 'Any dates after this will be ignored.', null],
 		];
-	}
-
-	/**
-	 * Get the console command options.
-	 *
-	 * @return string
-	 */
-	public static function getSchedule()
-	{
-		return static::$schedule;
-	}
-
-	/**
-	 * Get the stat name.
-	 *
-	 * @return string
-	 */
-	public static function getStatName()
-	{
-		return static::$statName;
-	}
-
-	/**
-	 * Get the stat prefix.
-	 *
-	 * @return string
-	 */
-	public static function getStatPrefix()
-	{
-		return 'stats:';
 	}
 
 }

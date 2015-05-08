@@ -12,7 +12,7 @@ class StatsServiceProvider extends ServiceProvider {
 	 */
 	protected $statCommands = [
 		'App\Console\Commands\Stats\UserStatsCommand',
-		'App\Console\Commands\Stats\RoleStatsCommand',
+		'App\Console\Commands\Stats\DiskSpaceStatsCommand',
 	];
 
 	/**

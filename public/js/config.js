@@ -14,6 +14,8 @@ require.config({
 
 			"text": "requirejs-text/text",
 
+			"chart": "chartjs/Chart",
+
 			// "templates/helpers": "../js/_common/templates/helpers",
 
 			// "async":"requirejs-plugins/src/async",
