@@ -54,6 +54,19 @@
 								<a href="{{ route('password.email') }}">{{ trans('copy.auth.login.forgot') }}</a>
 							</div>
 						</div>
+
+						@if(count(config('auth.providers')) > 0)
+							<div class="form-group">
+								<div class="col-md-6 col-md-offset-4">
+									@foreach(config('auth.providers') as $provider => $name)
+										<a class="btn btn-default" href="{{ route('auth.provider', $provider) }}">
+											{{ $name }}
+										</a>
+									@endforeach
+								</div>
+							</div>
+						@endif
+
 					</form>
 				</div>
 			</div>

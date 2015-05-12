@@ -16,7 +16,7 @@ class Hashed extends Model
 		parent::boot();
 
 		static::creating(function($model){
-			$model->guid = Uuid::uuid4();
+			$model->guid = Uuid::uuid1();
 		});
 	}
 

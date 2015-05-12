@@ -11,6 +11,7 @@ Route::get('test/{id}', [
 ]);
 
 Route::controller('account', 'Auth\AuthController', [
+	'getProvider'  => 'auth.provider',
 	'getLogin'     => 'auth.login',
 	'postLogin'    => 'auth.login.do',
 	'getRegister'  => 'auth.register',

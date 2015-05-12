@@ -21,6 +21,11 @@ class CreateUsersTable extends Migration
 			$table->string('email')->unique();
 			$table->string('password', 60);
 			$table->rememberToken();
+			$table->string('confirmation_code');
+			$table->boolean('confirmed')->default(false);
+			$table->integer('social_id')->unsigned()->nullable();
+			$table->dateTime('first_login')->nullable();
+			$table->dateTime('last_login')->nullable();
 			$table->timestamps();
 		});
 	}

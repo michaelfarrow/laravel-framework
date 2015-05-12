@@ -141,6 +141,7 @@ return [
 		 */
 		'Clockwork\Support\Laravel\ClockworkServiceProvider',
 		'Zizaco\Entrust\EntrustServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 		'Kyslik\ViewClear\ViewClearServiceProvider',
 		'Weyforth\Tracker\TrackerServiceProvider',
 		'Spatie\LaravelAnalytics\LaravelAnalyticsServiceProvider',

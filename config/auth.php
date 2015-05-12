@@ -64,4 +64,18 @@ return [
 		'expire' => 60,
 	],
 
+	/*
+	|--------------------------------------------------------------------------
+	| Login providers
+	|--------------------------------------------------------------------------
+	|
+	| Lists the supported social login providers
+	|
+	*/
+
+	'providers' => [
+		'facebook' => 'Facebook',
+		'twitter'  => 'Twitter',
+	],
+
 ];

@@ -36,4 +36,45 @@ class User extends Hashed implements AuthenticatableContract, CanResetPasswordCo
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * Get the name of the user, from the first relevant social
+	 * or user table field.
+	 *
+	 * @return string
+	 */
+	public function getNameAttribute()
+	{
+		if ($this->social)
+		{
+			return $this->social->name ?:
+				$this->social->username ?:
+					$this->social->email ?:
+						$this->attributes['name'];
+		}
+		else
+		{
+			return $this->attributes['name'];
+		}
+	}
+
+	/**
+	 * Is the current login the users first?
+	 *
+	 * @return boolean
+	 */
+	public function isFirstLogin()
+	{
+		return $this->last_login == $this->first_login;
+	}
+
+	/**
+	 * The users social user relationship.
+	 *
+	 * @var Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
+	public function social()
+	{
+		return $this->belongsTo('App\Models\SocialUser', 'social_id', 'id');
+	}
+
 }
