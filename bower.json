@@ -44,6 +44,7 @@
     "pointer": "https://github.com/mozilla/pointer.js.git",
     "jquery-throttle-debounce": "v1.1",
     "shake.js": "1.2.1",
-    "backbone-filtered-collection": "0.4.0"
+    "backbone-filtered-collection": "0.4.0",
+    "chartjs": "1.0.2"
   }
 }

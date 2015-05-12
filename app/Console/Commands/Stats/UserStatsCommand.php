@@ -25,25 +25,4 @@ class UserStatsCommand extends DataStatsCommand {
 	 */
 	protected $queryTable = 'users';
 
-	/**
-	 * The date/time field to use in the query.
-	 *
-	 * @var string
-	 */
-	protected $queryDateField = 'created_at';
-
-	/**
-	 * The field to quantify.
-	 *
-	 * @var string
-	 */
-	protected $queryField = 'id';
-
-	/**
-	 * The quantify action to take.
-	 *
-	 * @var string
-	 */
-	protected $queryType = 'count';
-
 }

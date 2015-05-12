@@ -55,3 +55,24 @@ if ( ! function_exists('trans_default'))
 			: $return;
 	}
 }
+
+if ( ! function_exists('array_human'))
+{
+	/**
+	 * Convert an array of values to a human readable string.
+	 *
+	 * @param  array  $array
+	 * @param  string $delimiter
+	 * @param  string $last
+	 * @return string
+	 */
+	function array_human($array, $delimiter = ',', $last = 'and')
+	{
+		if(count($array) == 0) return '';
+		if(count($array) == 1) return $array[0];
+
+		$lastItem = array_pop($array);
+
+		return implode("$delimiter ", $array) . " $last " . $lastItem;
+	}
+}

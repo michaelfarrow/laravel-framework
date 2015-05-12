@@ -20,7 +20,7 @@ class CreateStatisticsTable extends Migration
 			$table->string('period');
 			$table->datetime('start')->nullable();
 			$table->datetime('end')->nullable();
-			$table->float('value');
+			$table->double('value', 15, 8);
 			$table->timestamps();
 
 			$table->unique(['name', 'period', 'start', 'end']);

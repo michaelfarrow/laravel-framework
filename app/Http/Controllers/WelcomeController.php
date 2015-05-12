@@ -21,6 +21,10 @@ class WelcomeController extends Controller {
 	 */
 	public function index()
 	{
+		// dd(hash_file('crc32b', app_path('Support/helpers.php')));
+		// hash_file(app_path(), filename);
+		// dd(disk_free_space('/') / disk_total_space('/') * 100);
+
 		function outputList($list)
 		{
 			$out = '<ul>';

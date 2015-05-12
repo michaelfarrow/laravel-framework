@@ -217,6 +217,8 @@ return [
 		 * Application Aliases...
 		 */
 
+		'Statistics' => 'App\Support\Facades\Statistics',
+
 	],
 
 ];
