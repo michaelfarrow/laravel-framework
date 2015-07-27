@@ -1,0 +1,36 @@
+data:
+  extends:
+    file: docker-compose-common.yml
+    service: data
+
+storage:
+  extends:
+    file: docker-compose-common.yml
+    service: storage
+
+db:
+  extends:
+    file: docker-compose-common.yml
+    service: db
+  volumes_from:
+    - storage
+
+composer:
+  image: weyforth/laravel-composer
+  volumes_from:
+    - storage
+    - data
+
+artisan:
+  image: weyforth/laravel-artisan
+  links:
+    - db
+  volumes_from:
+    - storage
+    - data
+
+buildtools:
+  image: weyforth/laravel-buildtools
+  volumes_from:
+    - storage
+    - data

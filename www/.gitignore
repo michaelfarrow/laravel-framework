@@ -1,0 +1,13 @@
+!/public/build/*/.minified/
+!/public/build/*/vendor/
+/public/lib/*
+!/public/lib/.gitkeep
+/node_modules/
+/resources/assets/less
+/puppet/
+/storage/analytics/*
+!/storage/analytics/.gitkeep
+/vendor
+/public/vendor
+.minified/
+.compiled/

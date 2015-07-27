@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -e
+
+if [[ -d app ]]; then
+
+	cd app
+
+	tools/stop production
+
+	cd ../
+
+fi
+
+rm -rf app
+cp -r app-build app
+
+cd app
+
+tools/start production
+tools/install
+
+# mkdir -p app-shared
+# mkdir -p app-shared/logs
+
+# rm -rf app/logs/
+# ln -s app-shared/logs/ app/logs

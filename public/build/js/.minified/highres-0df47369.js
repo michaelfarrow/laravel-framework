@@ -1,1 +1,0 @@
-Modernizr.addTest("highres",function(){var e=window.devicePixelRatio||window.screen.deviceXDPI/window.screen.logicalXDPI||1;return!!(e>1)});

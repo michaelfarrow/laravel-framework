@@ -1,0 +1,15 @@
+storage:
+  image: weyforth/laravel-base
+  volumes:
+    - /storage
+    - /var/lib/postgresql/data
+
+data:
+  image: weyforth/laravel-base
+  volumes:
+    - .:/data:rw
+
+db:
+  image: postgres:9.5
+  environment:
+    POSTGRES_PASSWORD: dbpass

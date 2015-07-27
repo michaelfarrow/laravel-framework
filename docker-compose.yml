@@ -1,0 +1,41 @@
+storage:
+  extends:
+    file: docker-compose-common.yml
+    service: storage
+
+data:
+  extends:
+    file: docker-compose-common.yml
+    service: data
+
+test:
+  image: weyforth/laravel-base
+  volumes_from:
+    - storage
+    - data
+
+db:
+  extends:
+    file: docker-compose-common.yml
+    service: db
+  volumes_from:
+    - storage
+
+fpm:
+  image: weyforth/laravel-phpfpm
+  links:
+    - db
+  volumes_from:
+    - storage
+    - data
+
+nginx:
+  image: weyforth/laravel-nginx
+  links:
+    - fpm
+    - db
+  volumes_from:
+    - storage
+    - data
+  ports:
+    - "80:80"

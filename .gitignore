@@ -1,6 +1,3 @@
-.vagrant
-package.box
-
 # Numerous always-ignore extensions
 *.diff
 *.err
@@ -38,16 +35,7 @@ dwsync.xml
 .svn
 .CVS
 .idea
-.capistrano
 .compiled/
 .minified/
-vendor/
-!/public/build/*/.minified/
-!/public/build/*/vendor/
-/public/lib/*
-!/public/lib/.gitkeep
-/node_modules/
-/resources/assets/less
-/puppet/
-/storage/analytics/*
-!/storage/analytics/.gitkeep
+/logs/*
+!/logs/.gitkeep

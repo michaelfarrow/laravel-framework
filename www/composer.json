@@ -1,0 +1,62 @@
+{
+	"name": "laravel/laravel",
+	"description": "The Laravel Framework.",
+	"keywords": ["framework", "laravel"],
+	"license": "MIT",
+	"type": "project",
+	"repositories": [
+		{
+			"type": "git",
+			"url":  "https://github.com/weyforth/translation.git"
+		},
+		{
+			"type": "git",
+			"url": "https://github.com/weyforth/laravel-tracker.git"
+		}
+	],
+	"require": {
+		"laravel/framework": "5.0.*",
+		"ramsey/uuid": "2.8.0",
+		"itsgoingd/clockwork": "@dev",
+		"laravel/socialite": "~2.0",
+		"pda/pheanstalk": "~3.0",
+		"waavi/translation": "@dev",
+		"zizaco/entrust": "dev-laravel-5",
+		"kyslik/view-clear": "~1.0.0",
+		"guzzlehttp/guzzle": "~5.0",
+		"weyforth/laravel-tracker": "1.3",
+		"spatie/laravel-analytics": "1.1.2"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.0",
+		"phpspec/phpspec": "~2.1"
+	},
+	"autoload": {
+		"classmap": [
+			"database"
+		],
+		"psr-4": {
+			"App\\": "app/"
+		},
+		"files": [
+				"app/Support/helpers.php"
+		]
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/TestCase.php"
+		]
+	},
+	"scripts": {
+		"post-install-cmd": [
+		],
+		"post-update-cmd": [
+		],
+		"post-create-project-cmd": [
+			"php artisan key:generate"
+		]
+	},
+	"config": {
+		"preferred-install": "dist"
+	}
+}

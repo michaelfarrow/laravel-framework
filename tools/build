@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+build_env="local"
+
+if [[ "$1" != "" ]];
+	then
+	build_env="$1"
+fi
+
+cp "www/.env.$build_env" www/.env
+
+tools/composer install --prefer-source --no-interaction
+
+tools/npm config set registry http://registry.npmjs.org/
+tools/npm install --no-optional --verbose
+
+tools/bower install
+
+tools/gulp build
