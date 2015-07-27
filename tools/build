@@ -13,6 +13,13 @@ cp "www/.env.$build_env" www/.env
 
 tools/composer install --prefer-source --no-interaction
 
+tools/npm link gulp
+tools/npm link gulp-bower
+tools/npm link gulp-minify-css
+tools/npm link gulp-uglify
+tools/npm link gulp-modernizr
+tools/npm link gulp-compass
+tools/npm link gulp-requirejs-optimize
 tools/npm config set registry http://registry.npmjs.org/
 tools/npm install --no-optional --verbose
 
