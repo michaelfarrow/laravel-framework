@@ -32,7 +32,7 @@ heading "Linking npm tools"
 tools/build_link
 
 heading "Installing Composer dependencies"
-tools/composer install $composer_args
+tools/composer install --prefer-dist $composer_args
 
 heading "Installing NPM dependencies"
 tools/npm install $npm_args
@@ -41,7 +41,7 @@ heading "Installing Bower dependencies"
 tools/bower install $bower_args
 
 heading "Gulping"
-# tools/gulp
+tools/gulp
 
 if [[ "$build_env" != "local" ]]; then
 	heading "Unlinking npm tools"
