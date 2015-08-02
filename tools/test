@@ -1,8 +1,0 @@
-#!/bin/bash
-
-set -e
-
-wrapdocker &
-sleep 5
-
-tools/build

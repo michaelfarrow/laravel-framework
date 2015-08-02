@@ -76,3 +76,21 @@ if ( ! function_exists('array_human'))
 		return implode("$delimiter ", $array) . " $last " . $lastItem;
 	}
 }
+
+if ( ! function_exists('build_asset'))
+{
+	/**
+	 * Return a normal asset path or an elixir path,
+	 * based on the current environment.
+	 *
+	 * @param  string $path
+	 * @return string
+	 */
+	function build_asset($path) {
+		if(App::isLocal()) {
+			return asset($path);
+		} else {
+			return elixir($path);
+		}
+	}
+}

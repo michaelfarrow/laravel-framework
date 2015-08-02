@@ -1,10 +1,15 @@
 #!/bin/bash
 
+source app-build/tools/_functions
+
 set -e
 
 if [[ -d app ]]; then
 
 	cd app
+
+	heading "Removing data"
+	docker-compose run --rm data rm -rf /data/www
 
 	tools/stop production
 
@@ -12,16 +17,13 @@ if [[ -d app ]]; then
 
 fi
 
-rm -rf app
-cp -r app-build app
+heading "Copying files"
+
+rm -rf app && cp -r app-build app && echo "done"
 
 cd app
 
 tools/start production
-tools/install
+tools/install production
 
-# mkdir -p app-shared
-# mkdir -p app-shared/logs
-
-# rm -rf app/logs/
-# ln -s app-shared/logs/ app/logs
+echo ""

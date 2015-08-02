@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source tools/_functions
+
 set -e
 
 build_env="local"
@@ -9,20 +11,41 @@ if [[ "$1" != "" ]];
 	build_env="$1"
 fi
 
+composer_args=""
+bower_args=""
+npm_args=""
+
+if [[ "$build_env" != "local" ]]; then
+	composer_args="--no-progress"
+	bower_args="--quiet"
+	npm_args="--silent"
+fi
+
 cp "www/.env.$build_env" www/.env
 
-tools/composer install --prefer-source --no-interaction
+if [[ "$build_env" != "local" ]]; then
+	heading "Pulling Docker images"
+	docker-compose -f docker-compose-tools.yml pull >/dev/null
+fi
 
-tools/npm link gulp
-tools/npm link gulp-bower
-tools/npm link gulp-minify-css
-tools/npm link gulp-uglify
-tools/npm link gulp-modernizr
-tools/npm link gulp-compass
-tools/npm link gulp-requirejs-optimize
-tools/npm config set registry http://registry.npmjs.org/
-tools/npm install --no-optional --verbose
+heading "Linking npm tools"
+tools/build_link
 
-tools/bower install
+heading "Installing Composer dependencies"
+tools/composer install $composer_args
 
-tools/gulp build
+heading "Installing NPM dependencies"
+tools/npm install $npm_args
+
+heading "Installing Bower dependencies"
+tools/bower install $bower_args
+
+heading "Gulping"
+# tools/gulp
+
+if [[ "$build_env" != "local" ]]; then
+	heading "Unlinking npm tools"
+	tools/build_unlink
+fi
+
+echo ""

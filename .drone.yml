@@ -1,0 +1,12 @@
+image: weyforth/drone-docker
+env:
+  - LOG=file
+script:
+  - tools/pre_deploy
+branches:
+  - master
+  - docker
+notify:
+  email:
+    recipients:
+      - build@mikefarrow.co.uk

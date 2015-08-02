@@ -1,89 +1,251 @@
-var elixir = require('laravel-elixir'),
-	paths = {
-		'bootstrap': 'public/vendor/bootstrap-sass-official/assets',
-		'requirejs': 'public/vendor/requirejs',
-		'bower_libs': 'public/vendor'
+
+var modernizrTests = [
+	'cssclasses',
+	'rgba',
+	'svg',
+	'boxshadow',
+	'backgroundsize',
+];
+
+var gulp       = require('gulp'),
+		fs         = require('fs'),
+    del        = require('del'),
+    addSrc     = require('gulp-add-src'),
+    vinylPaths = require('vinyl-paths'),
+    rev        = require('gulp-rev'),
+    copy       = require('gulp-copy'),
+    rename     = require('gulp-rename'),
+    concat     = require('gulp-concat'),
+    size       = require('gulp-size'),
+    minify     = require('gulp-minify-css'),
+    uglify     = require('gulp-uglify'),
+    jshint     = require('gulp-jshint'),
+    jshint_s   = require('jshint-stylish'),
+    compass    = require('gulp-compass'),
+    requirejs  = require('gulp-requirejs-optimize'),
+    modernizr  = require('gulp-modulizr');
+
+
+gulp.task('version', ['build'], function() {
+	var files = vinylPaths();
+
+	emptyBuildPathFiles(
+		path.build().s(),
+		path.build().append('rev-manifest.json').s()
+	);
+
+	return gulp.src([
+			path.css().minified().append('*.css').s(),
+			path.js().minified().append('*.js').s(),
+			path.js().vendor().minified().append('*.js').s(),
+		], { base: './public' })
+		.pipe(rename(function (path) {
+			path.dirname = path.dirname.replace('/.minified', '');
+		}))
+		.pipe(gulp.dest(path.build().s()))
+		.pipe(files)
+		.pipe(rev())
+		.pipe(gulp.dest(path.build().s()))
+		.pipe(rev.manifest())
+		.pipe(gulp.dest(path.build().s()))
+		.on('end', function() {
+			del(files.paths, { force: true });
+		});
+});
+
+gulp.task('copy-requirejs', function() {
+	var files = vinylPaths();
+
+	return gulp.src(path.bower('requirejs/require.js').s())
+		.pipe(gulp.dest(path.js().vendor().s()))
+		.pipe(size({ title:'Original', showFiles:true }))
+		.pipe(uglify())
+		.pipe(gulp.dest(path.js().vendor().minified().s()))
+		.pipe(size({ title:'Optimized', showFiles:true, gzip:true }));
+});
+
+gulp.task('copy-bootstrap-fonts', function() {
+	result = gulp.src(path.bower('bootstrap-sass-official/assets/fonts/bootstrap/*').s())
+		.pipe(gulp.dest(path.fonts().vendor().append('bootstrap').s()))
+		.pipe(size({ title:'Bootstrap Fonts', gzip:true }));
+});
+
+gulp.task('compile-compass', function() {
+	return gulp.src(path.sass().append('*.scss').s())
+		.pipe(compass({
+			css: path.css().s(),
+			sass: path.sass().s(),
+			image: path.images().s()
+		}))
+		.pipe(minify())
+		.pipe(gulp.dest(path.css().minified().s()));
+});
+
+gulp.task('custom-modernizr', function() {
+
+	return gulp.src(path.bower('modernizr/modernizr.js').s())
+		.pipe(size({ title:'Original', showFiles:true }))
+		.pipe(modernizr(modernizrTests))
+		.pipe(addSrc.append([
+			path.js().append('modernizr/*.js').s()
+		]))
+		.pipe(concat('modernizr.js'))
+		.pipe(gulp.dest(path.js().vendor().s()))
+		.pipe(uglify())
+		.pipe(gulp.dest(path.js().vendor().minified().s()))
+		.pipe(size({ title:'Optimized', showFiles:true, gzip:true }));
+});
+
+gulp.task('lint-js', function() {
+	return gulp.src([
+			path.js().append('/**/*.js').s(),
+			'!' + path.js().vendor().append('*.js').s()
+		])
+		.pipe(jshint())
+		.pipe(jshint.reporter(jshint_s))
+		.pipe(jshint.reporter('fail'));
+});
+
+gulp.task('compile-js-app', function () {
+	return gulp.src(path.js().append('main.app.js').s())
+		.pipe(requirejs({
+			optimize: 'none',
+			findNestedDependencies: true,
+			baseUrl: path.bower().s(),
+			mainConfigFile: path.js().append('config.js').s(),
+			name: 'main.app',
+		}))
+		.pipe(gulp.dest(path.js().compiled().s()))
+		.pipe(size({ title:'Original', showFiles:true }))
+		.pipe(uglify())
+		.pipe(gulp.dest(path.js().minified().s()))
+		.pipe(size({ title:'Optimized', showFiles:true, gzip:true }));
+});
+
+gulp.task('compile-js-admin', function () {
+	return gulp.src(path.js().append('main.admin.js').s())
+		.pipe(requirejs({
+			optimize: 'none',
+			findNestedDependencies: true,
+			baseUrl: path.bower().s(),
+			mainConfigFile: path.js().append('config.js').s(),
+			name: 'main.admin',
+		}))
+		.pipe(gulp.dest(path.js().compiled().s()))
+		.pipe(size({ title:'Original', showFiles:true }))
+		.pipe(uglify())
+		.pipe(gulp.dest(path.js().minified().s()))
+		.pipe(size({ title:'Optimized', showFiles:true, gzip:true }));
+});
+
+gulp.task('build', [
+	'copy-requirejs',
+	'copy-bootstrap-fonts',
+	'custom-modernizr',
+	'compile-compass',
+	'lint-js',
+	'compile-js-app',
+	'compile-js-admin',
+]);
+
+gulp.task('default', [
+	'version',
+]);
+
+gulp.task('watch', function() {
+	gulp.watch(path.sass().append('*.scss').s(), ['compile-compass']);
+	gulp.watch([
+		path.js().append('/**/*.js').s(),
+		'!' + path.js().vendor().append('*.js').s()
+	], ['lint-js']);
+	gulp.watch(path.js().append('modernizr/*.js').s(), ['custom-modernizr']);
+});
+
+
+function path(p, f){
+	if(f) f = '/' + f;
+	this.path = p + path.format(f);
+};
+
+path.assets = function() {
+	return new path('resources/assets');
+};
+
+path.public = function() {
+	return new path('public');
+};
+
+path.bower = function(p) {
+	return path.public().append('libs').append(p);
+};
+
+path.sass = function() {
+	return path.assets().append('scss');
+};
+
+path.css = function() {
+	return path.public().append('css');
+};
+
+path.images = function() {
+	return path.public().append('img');
+};
+
+path.fonts = function() {
+	return path.public().append('fonts');
+};
+
+path.js = function() {
+	return path.public().append('js');
+};
+
+path.build = function(p) {
+	return path.public().append('build').append(p);
+};
+
+path.format = function(p) {
+	if(!p) return '';
+	return p;
+},
+
+path.prototype = {
+
+	path: '',
+
+	toString: function(){
+		return this.path;
+	},
+
+	s: function(){
+		return this.toString();
+	},
+
+	append: function(p) {
+		return new path(this.path, p);
+	},
+
+	compiled: function() {
+		return this.append('.compiled');
+	},
+
+	minified: function() {
+		return this.append('.minified');
+	},
+
+	vendor: function() {
+		return this.append('vendor');
 	}
 
-// require('laravel-elixir-compass');
-require('./resources/elixir/elixir-custom-tasks');
+}
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Less
- | file for our application, as well as publishing vendor resources.
- |
- */
+var emptyBuildPathFiles = function(buildPath, manifest) {
+    fs.stat(manifest, function(err, stat) {
+        if (! err) {
+            manifest = JSON.parse(fs.readFileSync(manifest));
 
-elixir(function(mix) {
-
-	// Install FE deps
-	// mix.bower(paths.bower_libs)
-
-		// Prune FE deps
-		// .bower_prune()
-
-		// Copy requirejs
-		mix.copy(paths.requirejs + '/require.js', 'public/js/.compiled/require.js')
-
-		// Copy Bootstrap assets
-		.copy(paths.bootstrap + '/fonts/bootstrap', "public/fonts/bootstrap/")
-
-		// Compile compass
-		.compass(null,  'public/css/.compiled')
-
-		// Build Custom Modernizr
-		// .modernizr([
-		// 		elixir.config.cssOutput + '/.compiled/*.css',
-		// 		elixir.config.jsOutput + '/*.js',
-		// 	],
-		// 	elixir.config.jsOutput + '/.compiled', {
-		// 		excludeTests: ['hidden'],
-		// 		options: [
-		// 			"setClasses",
-		// 			"addTest",
-		// 			"html5printshiv",
-		// 			"testProp",
-		// 			"fnBind"
-		// 		],
-		// 	}
-		// )
-
-		// Build JS bundle
-		// .requirejs([
-		// 	elixir.config.jsOutput + '/main.app.js',
-		// 	elixir.config.jsOutput + '/main.admin.js'
-		// ], elixir.config.jsOutput + '/.compiled', {
-		// 	baseUrl: paths.bower_libs,
-		// 	name: '../vendor/almond/almond',
-		// 	mainConfigFile: elixir.config.jsOutput + '/config.js',
-		// })
-
-		// Minify CSS files for build
-		// .minify(
-		// 	elixir.config.cssOutput + '/.compiled/*.css',
-		// 	elixir.config.cssOutput + '/.minified'
-		// )
-
-		// Uglify JS files for build
-		// .uglify([
-		// 	elixir.config.jsOutput + '/.compiled/*.js',
-		// 	elixir.config.jsOutput + '/game.js',
-		// 	elixir.config.jsOutput + '/vendor/modernizr.js',
-		// 	elixir.config.jsOutput + '/modernizr/highres.js',
-		// ], elixir.config.jsOutput + '/.minified')
-
-		// Version files
-		// .version([
-		// 	elixir.config.jsOutput + '/.minified/*.js',
-		// 	elixir.config.cssOutput + '/.minified/*.css',
-		// ]);
-
-	// Run composer
-	// mix.composer();
-
-});
+            for (var key in manifest) {
+                del.sync(buildPath + '/' + manifest[key], { force: true });
+            }
+        }
+    });
+};

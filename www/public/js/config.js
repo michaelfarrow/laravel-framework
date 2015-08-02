@@ -1,5 +1,5 @@
 require.config({
-	"baseUrl": "/vendor",
+	"baseUrl": "/libs",
 		"paths": {
 			// "text": "../js/vendor/text",
 			// "hbs": "require-handlebars-plugin/hbs",

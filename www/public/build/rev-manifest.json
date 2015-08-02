@@ -1,9 +1,0 @@
-{
-  "js/.minified/highres.js": "js/.minified/highres-0df47369.js",
-  "js/.minified/main.admin.js": "js/.minified/main.admin-7a7070ed.js",
-  "js/.minified/main.app.js": "js/.minified/main.app-30dc9bad.js",
-  "js/.minified/modernizr.js": "js/.minified/modernizr-6eaf7a8f.js",
-  "js/.minified/require.js": "js/.minified/require-c3a513cc.js",
-  "css/.minified/admin.css": "css/.minified/admin-40a5149c.css",
-  "css/.minified/app.css": "css/.minified/app-40a5149c.css"
-}

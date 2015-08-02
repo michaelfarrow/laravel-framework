@@ -1,12 +1,11 @@
 #!/bin/bash
 
-set -e
-
 i=0
 timeout=30
 host="db"
 port=3306
-echo -n "waiting for mysql connection to $host:$port..."
+
+echo -n "Waiting for mysql connection to $host:$port..."
 
 while ! nc -w 1 $host $port 2>/dev/null 1>/dev/null
 do

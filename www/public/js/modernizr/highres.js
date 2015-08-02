@@ -4,5 +4,5 @@ Modernizr.addTest('highres', function() {
         (window.screen.deviceXDPI / window.screen.logicalXDPI) ||
         1;
 
-    return !!(dpr > 1);
+    return dpr > 1;
 });

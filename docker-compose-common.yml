@@ -13,3 +13,11 @@ db:
   image: postgres:9.5
   environment:
     POSTGRES_PASSWORD: dbpass
+
+fpm:
+  image: weyforth/laravel-phpfpm
+
+nginx:
+  image: weyforth/laravel-nginx
+  ports:
+    - "80:80"
