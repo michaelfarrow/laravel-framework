@@ -16,7 +16,7 @@ bower_args=""
 npm_args=""
 
 if [[ "$build_env" != "local" ]]; then
-	composer_args="--prefer-source --no-interaction --no-progress"
+	composer_args="--no-interaction --no-progress"
 	bower_args="--quiet"
 	npm_args="--silent"
 fi
@@ -32,7 +32,7 @@ heading "Linking npm tools"
 tools/build_link
 
 heading "Installing Composer dependencies"
-tools/composer install $composer_args
+tools/composer install --prefer-source $composer_args
 
 heading "Installing NPM dependencies"
 tools/npm install $npm_args

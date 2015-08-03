@@ -1,7 +1,4 @@
 #!/bin/bash
 
 set -e
-
-[ -t 1 ] || params="-T"
-
-docker-compose -f docker-compose-tools.yml run $params --rm artisan "$@"
+tools/run artisan "$@"

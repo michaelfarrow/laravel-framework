@@ -3,7 +3,7 @@
 i=0
 timeout=30
 host="db"
-port=3306
+port=5432
 
 echo -n "Waiting for mysql connection to $host:$port..."
 

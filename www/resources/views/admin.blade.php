@@ -1,29 +1,16 @@
 @extends('base')
 
 @section('head.styles')
-	@if(App::isLocal())
-			<link media="all" type="text/css" rel="stylesheet" href="{{ asset('css/.compiled/admin.css') }}">
-		@else
-			<link media="all" type="text/css" rel="stylesheet" href="{{ elixir('css/.minified/admin.css') }}">
-		@endif
+	<link media="all" type="text/css" rel="stylesheet" href="{{ asset('css/admin.css') }}">
 @endsection
 
 @section('head.scripts')
-	@if(App::isLocal())
-		<script src="{{ asset('js/.compiled/modernizr.js') }}"></script>
-		<script src="{{ asset('js/modernizr/highres.js') }}"></script>
-	@else
-		<script src="{{ elixir('js/.minified/modernizr.js') }}"></script>
-		<script src="{{ elixir('js/.minified/highres.js') }}"></script>
-	@endif
+	<script src="{{ build_asset('js/vendor/modernizr.js') }}"></script>
+	<script src="{{ build_asset('js/modernizr/highres.js') }}"></script>
 @endsection
 
 @section('foot.scripts')
-	@if(App::isLocal())
-		<script src="{{ asset('js/.compiled/require.js') }}" data-main="{{ asset('js/main.admin.js') }}"></script>
-	@else
-		<script src="{{ elixir('js/.minified/main.admin.js') }}"></script>
-	@endif
+	<script src="{{ asset('js/vendor/require.js') }}" data-main="{{ asset('js/main.admin.js') }}"></script>
 @endsection
 
 @section('content')

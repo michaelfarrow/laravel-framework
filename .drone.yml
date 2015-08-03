@@ -6,6 +6,14 @@ script:
 branches:
   - master
   - docker
+deploy:
+  bash:
+    script:
+      - ssh deploy@178.62.42.241 'rm -rf app-build'
+      - scp -o StrictHostKeyChecking=no -P 22 -r . deploy@178.62.42.241:app-build/
+      - ssh deploy@178.62.42.241 app-build/tools/deploy
+    when:
+      branch: docker
 notify:
   email:
     recipients:

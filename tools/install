@@ -18,12 +18,18 @@ docker-compose -f docker-compose-tools.yml run $params --rm buildtools ../tools/
 
 heading "Installing"
 
-# Laravel equivalent?
-if ! $(tools/wp core is-installed); then
+set +e
+docker-compose -f docker-compose-tools.yml run $params --rm buildtools cat /storage/.migrated  &> /dev/null
+migrated=$?
+set -e
+
+if [[ $migrated != 0 ]]; then
 
 	echo "Migrating and seeding database"
 	tools/artisan migrate
 	tools/artisan db:seed
+
+	docker-compose -f docker-compose-tools.yml run $params --rm buildtools touch /storage/.migrated
 
 else
 

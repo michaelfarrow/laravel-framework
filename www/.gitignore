@@ -3,6 +3,7 @@
 /node_modules/
 /resources/assets/less
 /public/css/*
+!/public/css/.gitkeep
 /public/fonts/vendor/*
 !/public/fonts/vendor/.gitkeep
 /public/js/vendor/*

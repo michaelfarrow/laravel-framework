@@ -31,6 +31,8 @@ artisan:
 
 buildtools:
   image: weyforth/laravel-buildtools
+  links:
+    - db
   volumes_from:
     - storage
     - data
