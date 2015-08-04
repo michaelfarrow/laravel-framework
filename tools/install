@@ -14,12 +14,12 @@ fi
 [ -t 1 ] || params="-T"
 
 heading "Database"
-docker-compose -f docker-compose-tools.yml run $params --rm buildtools ../tools/dbisup
+tools/run buildtools ../tools/dbisup
 
 heading "Installing"
 
 set +e
-docker-compose -f docker-compose-tools.yml run $params --rm buildtools cat /storage/.migrated  &> /dev/null
+tools/run fileaccess cat /storage/.migrated  &> /dev/null
 migrated=$?
 set -e
 
@@ -29,7 +29,7 @@ if [[ $migrated != 0 ]]; then
 	tools/artisan migrate
 	tools/artisan db:seed
 
-	docker-compose -f docker-compose-tools.yml run $params --rm buildtools touch /storage/.migrated
+	tools/run fileaccess touch /storage/.migrated
 
 else
 

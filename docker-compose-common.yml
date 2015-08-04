@@ -21,3 +21,12 @@ nginx:
   image: weyforth/laravel-nginx
   ports:
     - "80:80"
+
+artisan:
+  image: weyforth/laravel-artisan
+
+buildtools:
+  image: weyforth/laravel-buildtools
+
+fileaccess:
+  image: weyforth/laravel-base

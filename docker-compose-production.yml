@@ -38,3 +38,21 @@ nginx:
     - storage
     - data
   restart: always
+
+artisan:
+  extends:
+    file: docker-compose-common.yml
+    service: artisan
+  links:
+    - db
+  volumes_from:
+    - storage
+    - data
+
+fileaccess:
+  extends:
+    file: docker-compose-common.yml
+    service: fileaccess
+  volumes_from:
+    - storage
+    - data
