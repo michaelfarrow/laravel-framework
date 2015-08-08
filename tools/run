@@ -4,4 +4,9 @@ set -e
 
 [ -t 1 ] || params="-T"
 
-docker-compose -f docker-compose-tools.yml run $params --rm "$@"
+if [[ "$COMPOSE_FILE" == "" ]];
+	then
+	COMPOSE_FILE="docker-compose-tools.yml"
+fi
+
+COMPOSE_FILE="$COMPOSE_FILE" docker-compose run $params --rm "$@"

@@ -4,12 +4,14 @@ source app-build/tools/_functions
 
 set -e
 
+COMPOSE_FILE="docker-compose-production.yml"
+
 if [[ -d app ]]; then
 
 	cd app
 
 	heading "Removing data"
-	docker-compose run --rm data rm -rf /data/www
+	COMPOSE_FILE="$COMPOSE_FILE" docker-compose run --rm data rm -rf /data/www
 
 	tools/stop production
 

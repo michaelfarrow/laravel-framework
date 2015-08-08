@@ -2,7 +2,7 @@
 
 source tools/_functions
 
-build_env=""
+build_env="local"
 
 if [[ "$1" != "" ]];
 	then
@@ -11,17 +11,17 @@ fi
 
 if [[ "$build_env" != "local" ]]; then
 	heading "Pulling Docker images"
-	docker-compose -f "docker-compose$build_env.yml" pull >/dev/null
+	COMPOSE_FILE="$COMPOSE_FILE" docker-compose pull >/dev/null
 fi
 
 heading "Starting"
 
-if [[ $(docker-compose ps | grep _nginx) ]]; then
+if [[ $(COMPOSE_FILE="$COMPOSE_FILE" docker-compose ps | grep _nginx) ]]; then
 
-	docker-compose -f "docker-compose$build_env.yml" up --no-recreate -d db fpm nginx
+	COMPOSE_FILE="$COMPOSE_FILE" docker-compose up --no-recreate -d db fpm nginx
 
 else
 
-	docker-compose -f "docker-compose$build_env.yml" up -d
+	COMPOSE_FILE="$COMPOSE_FILE" docker-compose up -d
 
 fi

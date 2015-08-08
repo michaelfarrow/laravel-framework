@@ -2,16 +2,9 @@
 
 source tools/_functions
 
-build_env=""
-
-if [[ "$1" != "" ]];
-	then
-	build_env="-$1"
-fi
-
 if [[ $(docker-compose ps | grep Up) ]]; then
 
 	heading "Stopping"
-	docker-compose -f "docker-compose$build_env.yml" stop nginx db fpm
+	COMPOSE_FILE="$COMPOSE_FILE" docker-compose stop nginx db fpm
 
 fi

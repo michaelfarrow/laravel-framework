@@ -18,17 +18,6 @@ tools/run buildtools ../tools/dbisup
 
 heading "Installing"
 
-function artisan {
-	run_env=$install_env
-
-	if [[ "$run_env" == "local" ]];
-		then
-		run_env="tools"
-	fi
-
-  docker-compose -f "docker-compose-${run_env}.yml" run artisan $params --rm "$@"
-}
-
 set +e
 tools/run fileaccess cat /storage/.migrated  &> /dev/null
 migrated=$?
@@ -38,14 +27,14 @@ if [[ $migrated != 0 ]]; then
 
 	echo "Migrating and seeding database"
 
-	artisan migrate --force
-	artisan db:seed --force
+	tools/artisan migrate --force
+	tools/artisan db:seed --force
 
 	tools/run fileaccess touch /storage/.migrated
 
 else
 
 	echo "Already Installed, only migrating"
-	artisan migrate --force
+	tools/artisan migrate --force
 
 fi
