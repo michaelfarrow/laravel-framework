@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source tools/_functions
+
+set -e
+
+build_env="local"
+
+if [[ "$1" != "" ]];
+	then
+	build_env="$1"
+fi
+
+heading "Preparing Environment"
+echo "$build_env"
+
+cp "www/.env.$build_env" www/.env

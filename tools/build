@@ -21,7 +21,7 @@ if [[ "$build_env" != "local" ]]; then
 	npm_args="--silent"
 fi
 
-cp "www/.env.$build_env" www/.env
+tools/prepare_env $build_env
 
 if [[ "$build_env" != "local" ]]; then
 	heading "Pulling Docker images"
