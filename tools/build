@@ -25,7 +25,7 @@ tools/prepare_env $build_env
 
 if [[ "$build_env" != "local" ]]; then
 	heading "Pulling Docker images"
-	DOCKER_FILE="docker-compose-tools.yml" docker-compose pull >/dev/null
+	docker-compose -f docker-compose-tools.yml pull >/dev/null
 fi
 
 heading "Linking npm tools"
