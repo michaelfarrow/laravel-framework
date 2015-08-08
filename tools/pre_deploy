@@ -7,3 +7,5 @@ sleep 5
 
 tools/build testing
 tools/prepare_env production
+
+echo ""

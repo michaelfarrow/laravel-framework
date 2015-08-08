@@ -47,5 +47,3 @@ if [[ "$build_env" != "local" ]]; then
 	heading "Unlinking npm tools"
 	tools/build_unlink
 fi
-
-echo ""
