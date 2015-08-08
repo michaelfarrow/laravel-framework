@@ -15,8 +15,8 @@ db:
   volumes_from:
     - storage
   restart: always
-  environment:
-    POSTGRES_PASSWORD: ${WPF_POSTGRES_PASSWORD}
+  env_file:
+    - /home/deploy/db.env
 
 fpm:
   extends:
@@ -28,8 +28,9 @@ fpm:
     - storage
     - data
   restart: always
-  environment:
-    DB_PASSWORD: ${WPF_POSTGRES_PASSWORD}
+  env_file:
+    - /home/deploy/db.env
+    - /home/deploy/web.env
 
 nginx:
   extends:
@@ -52,8 +53,9 @@ artisan:
   volumes_from:
     - storage
     - data
-  environment:
-    DB_PASSWORD: ${WPF_POSTGRES_PASSWORD}
+  env_file:
+    - /home/deploy/db.env
+    - /home/deploy/web.env
 
 fileaccess:
   extends:

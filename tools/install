@@ -26,14 +26,14 @@ set -e
 if [[ $migrated != 0 ]]; then
 
 	echo "Migrating and seeding database"
-	tools/artisan migrate
-	tools/artisan db:seed
+	tools/artisan migrate -f
+	tools/artisan db:seed -f
 
 	tools/run fileaccess touch /storage/.migrated
 
 else
 
 	echo "Already Installed, only migrating"
-	tools/artisan migrate
+	tools/artisan migrate -f
 
 fi
