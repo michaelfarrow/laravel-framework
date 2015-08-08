@@ -11,17 +11,17 @@ fi
 
 if [[ "$build_env" != "local" ]]; then
 	heading "Pulling Docker images"
-	COMPOSE_FILE="$COMPOSE_FILE" docker-compose pull >/dev/null
+	docker-compose pull >/dev/null
 fi
 
 heading "Starting"
 
-if [[ $(COMPOSE_FILE="$COMPOSE_FILE" docker-compose ps | grep _nginx) ]]; then
+if [[ $(docker-compose ps | grep _nginx) ]]; then
 
-	COMPOSE_FILE="$COMPOSE_FILE" docker-compose up --no-recreate -d db fpm nginx
+	docker-compose up --no-recreate -d db fpm nginx
 
 else
 
-	COMPOSE_FILE="$COMPOSE_FILE" docker-compose up -d
+	docker-compose up -d
 
 fi

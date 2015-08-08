@@ -14,7 +14,7 @@ fi
 [ -t 1 ] || params="-T"
 
 heading "Database"
-tools/run buildtools ../tools/dbisup
+COMPOSE_FILE="docker-compose-tools.yml" tools/run buildtools ../tools/dbisup
 
 heading "Installing"
 

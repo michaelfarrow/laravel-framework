@@ -4,7 +4,7 @@ source app-build/tools/_functions
 
 set -e
 
-COMPOSE_FILE="docker-compose-production.yml"
+export COMPOSE_FILE="docker-compose-production.yml"
 
 if [[ -d app ]]; then
 
