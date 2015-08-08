@@ -6,7 +6,6 @@
 
 @section('head.scripts')
 	<script src="{{ build_asset('js/vendor/modernizr.js') }}"></script>
-	<script src="{{ build_asset('js/modernizr/highres.js') }}"></script>
 @endsection
 
 @section('foot.scripts')
